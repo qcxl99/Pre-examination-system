@@ -10,7 +10,4 @@ public class AppointementApplication {
     public static void main(String[] args) {
         SpringApplication.run(AppointementApplication.class, args);
     }
-
-
-
 }
