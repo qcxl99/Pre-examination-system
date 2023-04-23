@@ -1,6 +1,6 @@
-package doctor;
+package model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "doctors")
@@ -26,9 +26,9 @@ public class Doctor {
     @Column(name = "title", length = 255)
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "departement_id")
-    private Departement departement;
+    private Departement departement;*/
 
     @Column(name = "resume", length = 255)
     private String resume;
@@ -44,14 +44,14 @@ public class Doctor {
     }
 
     public Doctor(String name, int age, String educationBackground, String specialty, String title,
-                  Departement departement, String resume, String receptionRequirements, String availableTimings) {
+                  /*Departement departement, */String resume, String receptionRequirements, String availableTimings) {
         super();
         this.name = name;
         this.age = age;
         this.educationBackground = educationBackground;
         this.specialty = specialty;
         this.title = title;
-        this.departement = departement;
+        /*this.departement = departement;*/
         this.resume = resume;
         this.receptionRequirements = receptionRequirements;
         this.availableTimings = availableTimings;
@@ -105,13 +105,13 @@ public class Doctor {
         this.title = title;
     }
 
-    public Departement getDepartement() {
+    /*public Departement getDepartement() {
         return departement;
-    }
+    }*/
 
-    public void setDepartement(Departement departement) {
+    /*public void setDepartement(Departement departement) {
         this.departement = departement;
-    }
+    }*/
 
     public String getResume() {
         return resume;
