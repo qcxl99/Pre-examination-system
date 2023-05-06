@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>预检分诊问卷</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<h1>请问您哪里不舒服？</h1>
+<select id="discomfortLocation" onchange="displayQuestions()">
+    <option value="" disabled selected>选择部位</option>
+    <option value="head">头部</option>
+    <option value="abdomen">腹部</option>
+    <option value="chest">胸部</option>
+    <option value="wholeBody">全身</option>
+</select>
+
+<div id="headQuestions" class="hidden">
+    <h2>如果您选择了“头部”，请回答以下问题：</h2>
+    <h3>您的头痛是否伴随着其他症状：</h3>
+    <input type="radio" id="optionA1" name="headacheSymptoms" value="A">
+    <label for="optionA1">A. 疲劳、紧张，失眠、记忆减退，情绪不稳定</label><br>
+    <input type="radio" id="optionB1" name="headacheSymptoms" value="B">
+    <label for="optionB1">B. 恶心呕吐，一侧肢体活动不力，不能言语</label><br>
+    <input type="radio" id="optionC1" name="headacheSymptoms" value="C">
+    <label for="optionC1">C. 眩晕、耳鸣，或者鼻塞、流脓性鼻涕或带血</label><br>
+    <input type="radio" id="optionD1" name="headacheSymptoms" value="D">
+    <label for="optionD1">D. 高血压或患有肾脏疾病，或者头痛伴有发烧</label><br>
+    <input type="radio" id="optionE1" name="headacheSymptoms" value="E">
+    <label for="optionE1">E. 光敏感，视力模糊或眼周围及眶上方疼痛</label><br>
+    <input type="radio" id="optionF1" name="headacheSymptoms" value="F">
+    <label for="optionF1">F. 常与头部水平转动密切相关，伴随头晕和手臂麻木</label><br>
+    <input type="radio" id="optionG1" name="headacheSymptoms" value="G">
+    <label for="optionG1">G. 您是否遭受了外伤，是否流血</label><br>
+    <button onclick="showSuggestion()">提交</button>
+</div>
+
+<div id="abdomenQuestions" class="hidden">
+    <h2>如果您选择了“腹部”，请回答以下问题：</h2>
+    <h3>您的腹痛是否伴随着其他症状：</h3>
+    <input type="radio" id="optionA2" name="abdomenSymptoms" value="A">
+    <label for="optionA2">A. 右上下腹疼痛</label><br>
+    <input type="radio" id="optionB2" name="abdomenSymptoms" value="B">
+    <label for="optionB2">B. 中上腹疼痛</label><br>
+    <input type="radio" id="optionC2" name="abdomenSymptoms" value="C">
+    <label for="optionC2">C. 左上腹疼痛</label><br>
+    <input type="radio" id="optionD2" name="abdomenSymptoms" value="D">
+    <label for="optionD2">D. 中下部疼痛</label><br>
+    <input type="radio" id="optionE2" name="abdomenSymptoms" value="E">
+    <label for="optionE2">E. 整个腹腔的疼痛</label><br>
+    <input type="radio" id="optionF2" name="abdomenSymptoms" value="F">
+    <label for="optionF2">F. 疼痛比较剧烈，甚至难以忍受</label><br>
+    <button onclick="showSuggestion()">提交</button>
+</div>
+
+<div id="chestQuestions" class="hidden">
+    <h2>如果您选择了“胸部”，请回答以下问题：</h2>
+    <!-- 在此添加胸部问题的HTML代码 -->
+</div>
+
+<div id="wholeBodyQuestions" class="hidden">
+    <h2>如果您选择了“全身”，请回答以下问题：</h2>
+    <!-- 在此添加全身问题的HTML代码 -->
+</div>
+
+<div id="suggestion" class="hidden">
+    <h2>建议您找：</h2>
+    <p id="department"></p>
+</div>
+
+
+<script>
+    function displayQuestions() {
+        const location = document.getElementById("discomfortLocation").value;
+        const headQuestions = document.getElementById("headQuestions");
+        const abdomenQuestions = document.getElementById("abdomenQuestions");
+        const chestQuestions = document.getElementById("chestQuestions");
+        const wholeBodyQuestions = document.getElementById("wholeBodyQuestions");
+
+        headQuestions.classList.add("hidden");
+        abdomenQuestions.classList.add("hidden");
+        chestQuestions.classList.add("hidden");
+        wholeBodyQuestions.classList.add("hidden");
+
+        switch (location) {
+            case "head":
+                headQuestions.classList.remove("hidden");
+                break;
+            case "abdomen":
+                abdomenQuestions.classList.remove("hidden");
+                break;
+            case "chest":
+                chestQuestions.classList.remove("hidden");
+                break;
+            case "wholeBody":
+                wholeBodyQuestions.classList.remove("hidden");
+                break;
+        }
+    }
+
+    function showSuggestion() {
+        const headOption = document.querySelector('input[name="headacheSymptoms"]:checked');
+        const abdomenOption = document.querySelector('input[name="abdomenSymptoms"]:checked');
+        let selectedOption = '';
+
+        if (headOption) {
+            selectedOption = headOption.value + '1';
+        } else if (abdomenOption) {
+            selectedOption = abdomenOption.value + '2';
+        }
+
+        const department = document.getElementById("department");
+        const suggestion = document.getElementById("suggestion");
+        let suggestedDepartment;
+
+        switch (selectedOption) {
+            case "A1":
+                suggestedDepartment = "神经内科";
+                break;
+            case "B1":
+                suggestedDepartment = "急诊神经内科";
+                break;
+            case "C1":
+                suggestedDepartment = "耳鼻喉科";
+                break;
+            case "D1":
+                suggestedDepartment = "内科";
+                break;
+            case "E1":
+                suggestedDepartment = "眼科";
+                break;
+            case "F1":
+                suggestedDepartment = "脊柱外科或康复科";
+                break;
+            case "G1":
+                suggestedDepartment = "神经外科";
+                break;
+            case "A2":
+                suggestedDepartment = "外科";
+                break;
+            case "B2":
+                suggestedDepartment = "消化内科";
+                break;
+            case "C2":
+                suggestedDepartment = "普外科或消化内科";
+                break;
+            case "D2":
+                suggestedDepartment = "妇科或者泌尿外科";
+                break;
+            case "E2":
+                suggestedDepartment = "消化内科";
+                break;
+            case "F2":
+                suggestedDepartment = "急诊科或者拨打急救电话";
+                break;
+            default:
+                suggestedDepartment = "未知";
+        }
+
+        department.textContent = suggestedDepartment;
+        suggestion.classList.remove("hidden");
+    }
+
+</script>
+</body>
+</html>
