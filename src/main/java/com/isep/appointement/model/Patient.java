@@ -1,4 +1,4 @@
-package model;
+package com.isep.appointement.model;
 
 import javax.persistence.*;
 
@@ -7,7 +7,14 @@ import javax.persistence.*;
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
+
+    @Column(name = "username", nullable = false, length = 50)
+    private String username;
+
+    @Column(name = "password", nullable = false, length = 50)
+    private String password;
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;
@@ -15,16 +22,19 @@ public class Patient {
     @Column(name = "age", nullable = false)
     private int age;
 
+    @Column(name = "sex", nullable = false)
+    private int sex; // 0:female, 1:male, 2: other ...
+
     @Column(name = "address", length = 255)
     private String address;
 
-    @Column(name = "case")
+    @Column(name = "cases")
     private String caseImg;
 
-    @Column(name = "telephone")
+    @Column(name = "phone", nullable = false, length = 20)
     private int telephone;
 
-    @Column(name = "mail", length = 50)
+    @Column(name = "email", nullable = false, length = 50)
     private String mail;
 
     @Column(name = "id_number", nullable = false, length = 20)
@@ -58,8 +68,40 @@ public class Patient {
         this.chronicDiseases = chronicDiseases;
         this.geneticDiseases = geneticDiseases;
     }
+//All attributes
 
-    // getters and setters
+    public Patient(Long id, String username, String password, String name, int age, int sex, String address, String caseImg, int telephone, String mail, String idNumber, String job, String allergens, String chronicDiseases, String geneticDiseases) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
+        this.address = address;
+        this.caseImg = caseImg;
+        this.telephone = telephone;
+        this.mail = mail;
+        this.idNumber = idNumber;
+        this.job = job;
+        this.allergens = allergens;
+        this.chronicDiseases = chronicDiseases;
+        this.geneticDiseases = geneticDiseases;
+    }
+
+    //Attributes necessary
+    public Patient(Long id, String username, String password, String name, int age,int sex, int telephone, String mail, String idNumber) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
+        this.telephone = telephone;
+        this.mail = mail;
+        this.idNumber = idNumber;
+    }
+
+// getters and setters
 
     public Long getId() {
         return id;
@@ -77,12 +119,36 @@ public class Patient {
         this.name = name;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public int getAge() {
         return age;
     }
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public int getSex() {
+        return sex;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
     }
 
     public String getAddress() {
@@ -139,5 +205,21 @@ public class Patient {
 
     public void setAllergens(String allergens) {
         this.allergens = allergens;
+    }
+
+    public String getChronicDiseases() {
+        return chronicDiseases;
+    }
+
+    public void setChronicDiseases(String chronicDiseases) {
+        this.chronicDiseases = chronicDiseases;
+    }
+
+    public String getGeneticDiseases() {
+        return geneticDiseases;
+    }
+
+    public void setGeneticDiseases(String geneticDiseases) {
+        this.geneticDiseases = geneticDiseases;
     }
 }
