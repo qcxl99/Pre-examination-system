@@ -223,4 +223,23 @@ public class Doctor {
         this.availableTimings = availableTimings;
     }
 
+    @Override
+    public String toString() {
+        return "Doctor{" +
+                "idDoc=" + idDoc +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", sex=" + sex +
+                ", telephone=" + telephone +
+                ", mail='" + mail + '\'' +
+                ", educationBackground='" + educationBackground + '\'' +
+                ", specialty='" + specialty + '\'' +
+                ", title='" + title + '\'' +
+                ", resume='" + resume + '\'' +
+                ", receptionRequirements='" + receptionRequirements + '\'' +
+                ", availableTimings='" + availableTimings + '\'' +
+                '}';
+    }
 }

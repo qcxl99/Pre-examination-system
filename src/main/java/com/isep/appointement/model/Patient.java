@@ -3,7 +3,7 @@ package com.isep.appointement.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "patients")
+@Table(name = "patient")
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,31 +43,18 @@ public class Patient {
     @Column(name = "job", length = 20)
     private String job;
 
-    @Column(name = "allergens", length = 255)
+    @Lob
     private String allergens;
 
-    @Column(name = "chronic_diseases", length = 255)
+    @Lob
     private String chronicDiseases;
 
-    @Column(name = "genetic_diseases", length = 255)
+    @Lob
     private String geneticDiseases;
 
     public Patient() {
     }
 
-    public Patient(String name, int age, String address, String caseImg, int telephone, String mail, String idNumber, String job, String allergens, String chronicDiseases, String geneticDiseases) {
-        this.name = name;
-        this.age = age;
-        this.address = address;
-        this.caseImg = caseImg;
-        this.telephone = telephone;
-        this.mail = mail;
-        this.idNumber = idNumber;
-        this.job = job;
-        this.allergens = allergens;
-        this.chronicDiseases = chronicDiseases;
-        this.geneticDiseases = geneticDiseases;
-    }
 //All attributes
 
     public Patient(Long id, String username, String password, String name, int age, int sex, String address, String caseImg, int telephone, String mail, String idNumber, String job, String allergens, String chronicDiseases, String geneticDiseases) {
@@ -89,7 +76,7 @@ public class Patient {
     }
 
     //Attributes necessary
-    public Patient(Long id, String username, String password, String name, int age,int sex, int telephone, String mail, String idNumber) {
+    public Patient(Long id, String username, String password, String name, int age, int sex, int telephone, String mail, String idNumber) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -221,5 +208,26 @@ public class Patient {
 
     public void setGeneticDiseases(String geneticDiseases) {
         this.geneticDiseases = geneticDiseases;
+    }
+
+    @Override
+    public String toString() {
+        return "Patient{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", sex=" + sex +
+                ", address='" + address + '\'' +
+                ", caseImg='" + caseImg + '\'' +
+                ", telephone=" + telephone +
+                ", mail='" + mail + '\'' +
+                ", idNumber='" + idNumber + '\'' +
+                ", job='" + job + '\'' +
+                ", allergens='" + allergens + '\'' +
+                ", chronicDiseases='" + chronicDiseases + '\'' +
+                ", geneticDiseases='" + geneticDiseases + '\'' +
+                '}';
     }
 }

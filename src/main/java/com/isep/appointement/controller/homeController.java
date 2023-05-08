@@ -16,4 +16,19 @@ public class homeController {
     public String index() {
         return "index";
     }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @GetMapping("/register")
+    public String register() {
+        return "register";
+    }
+
+    @GetMapping("/pretriage")
+    public String pretriage(){
+        return "Pre_Triage";
+    }
 }

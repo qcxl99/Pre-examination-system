@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Controller
 public class pretriageController {
 
-    @GetMapping("/pretriage")
+/*    @GetMapping("/pretriage")
     public String pretriage(){
         return "Pre_Triage";
-    }
+    }*/
 }
