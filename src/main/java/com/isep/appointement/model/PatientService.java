@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class PatientService {
     @Autowired
@@ -30,7 +32,11 @@ public class PatientService {
         return patientRepository.findAll();
     }
 
-    public Patient addPatient(Patient patient) {
-        return patientRepository.save(patient);
+    public void addPatient(Patient patient) {
+        Optional<Patient> patientsByMail =  patientRepository.findPatientsByMail(patient.getMail());
+        if(patientsByMail.isPresent()){
+            throw new IllegalStateException("email existed ");
+        }
+        patientRepository.save(patient);
     }
 }

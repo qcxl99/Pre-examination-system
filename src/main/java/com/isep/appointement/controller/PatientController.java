@@ -4,6 +4,7 @@ import com.isep.appointement.model.Patient;
 //import com.isep.appointement.model.PatientRepository;
 //import com.isep.appointement.model.PatientService;
 import com.isep.appointement.model.PatientService;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,3 +25,9 @@ public class PatientController {
         return patientService.getPatient() ;
     }
 
+    @PostMapping
+    public void registerNewPatient(@RequestBody Patient patient){
+
+        patientService.addPatient(patient);
+    }
+}

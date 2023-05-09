@@ -52,6 +52,9 @@ public class Patient {
     @Lob
     private String geneticDiseases;
 
+    public Patient() {
+    }
+
     public Patient(Long id, String username, String password, String name, int age, int sex, String address, String caseImg, int telephone, String mail, String idNumber, String job, String allergens, String chronicDiseases, String geneticDiseases) {
         this.id = id;
         this.username = username;
