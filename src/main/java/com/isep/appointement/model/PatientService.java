@@ -18,25 +18,33 @@ public class PatientService {
     }
 
     public List<Patient> getPatient() {
-/*        return List.of(
-                new Patient(1L,
-                "p1",
-                "1111",
-                "p1",
-                11, 0,
-                111111,
-                "p1@gmail.com",
-                "130102198002030211"));
-    }*/
 
         return patientRepository.findAll();
     }
+    public Patient getPatientById(Long id) {
 
+        return patientRepository.findById(id).get();
+    }
     public void addPatient(Patient patient) {
         Optional<Patient> patientsByMail =  patientRepository.findPatientsByMail(patient.getMail());
         if(patientsByMail.isPresent()){
             throw new IllegalStateException("email existed ");
         }
         patientRepository.save(patient);
+    }
+
+    public void editPatient(Patient patient) {
+        Optional<Patient> patientsById =  patientRepository.findPatientsById(patient.getId());
+        if(patientsById.isPresent()){
+            throw new IllegalStateException("patient id does not exist ");
+        }
+        patientRepository.save(patient);
+    }
+    public void deletePatient(Long id) {
+/*        Optional<Patient> patientsById =  patientRepository.findPatientsById(patient.getId());
+        if(patientsById.isPresent()){
+            throw new IllegalStateException("patient id does not exist ");
+        }*/
+        patientRepository.deleteById(id);
     }
 }

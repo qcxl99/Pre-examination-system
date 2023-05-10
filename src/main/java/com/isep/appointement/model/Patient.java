@@ -125,12 +125,24 @@ public class Patient {
         this.age = age;
     }
 
-    public int getSex() {
-        return sex;
+    public String getSex() {
+        if(sex == 0){
+            return "female";
+        }
+        else if(sex == 1){
+            return "male";
+        }
+        return "other";
     }
 
-    public void setSex(int sex) {
-        this.sex = sex;
+    public void setSex(String sex) {
+        if(sex == "female"){
+            this.sex = 0;
+        }
+        else if(sex == "male"){
+            this.sex = 1;
+        }
+        this.sex = 2;
     }
 
     public String getAddress() {
