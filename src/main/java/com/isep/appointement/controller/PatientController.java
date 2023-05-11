@@ -1,9 +1,7 @@
 package com.isep.appointement.controller;
 
 import com.isep.appointement.model.Patient;
-//import com.isep.appointement.model.PatientRepository;
-//import com.isep.appointement.model.PatientService;
-import com.isep.appointement.model.PatientService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,17 +20,17 @@ public class PatientController {
     @GetMapping("/hello")
     public List<Patient> patient(){
 
-        return patientService.getPatient() ;
+        return patientService.getAllPatient() ;
     }
 
-    @PostMapping
+/*    @PostMapping
     public void registerNewPatient(@RequestBody Patient patient){
 
         patientService.addPatient(patient);
-    }
+    }*/
     @GetMapping("/patient")
     public String showPatient(Model model){
-        model.addAttribute("patients", patientService.getPatient());
+        model.addAttribute("patients", patientService.getAllPatient());
         return "patient";
     }
 
@@ -40,7 +38,7 @@ public class PatientController {
     public String addPatient(Model model){
         model.addAttribute("patient", new Patient());
 
-        return "register";
+        return "addPatient";
     }
     @GetMapping("/patient/edit/{id}")
     public String editPatient(@PathVariable Long id, Model model){
@@ -52,7 +50,7 @@ public class PatientController {
     public String savePatient(@ModelAttribute("patient") Patient patient){
         patientService.addPatient(patient);
 
-        return "redirect:/patient";
+        return "redirect:/patient/new?success";
     }
     @PostMapping("/patient/{id}")
     public String UpdatePatient(@PathVariable Long id, @ModelAttribute("patient") Patient patient, Model model){
@@ -60,7 +58,7 @@ public class PatientController {
         existingPatient.setId(id);
         existingPatient.setName(patient.getName());
         existingPatient.setUsername(patient.getUsername());
-        existingPatient.setPassword(patient.getPassword());
+        existingPatient.setPassword(new BCryptPasswordEncoder().encode(patient.getPassword()));
         existingPatient.setTelephone(patient.getTelephone());
         existingPatient.setMail(patient.getMail());
         existingPatient.setIdNumber(patient.getIdNumber());

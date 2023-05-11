@@ -1,6 +1,6 @@
 package com.isep.appointement.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table

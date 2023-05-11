@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Query("SELECT p from Patient p where p.mail = ?1")
     Optional<Patient> findPatientsByMail(String email);
-    @Query("SELECT p from Patient p where p.id = ?1")
-    Optional<Patient> findPatientsById(Long id);
+    @Query("SELECT p from Patient p where p.telephone = ?1")
+    Optional<Patient> findPatientsByPhone(String phone);
 }
