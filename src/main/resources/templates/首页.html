@@ -42,7 +42,10 @@
                         <h2>Click here for</h2>
                         <h2>registration</h2>
                     </div>
+                    <button><a href="Registration.html" th:href="@{/login}">Login</a></button>
+                    <h2><br></h2>
                     <button><a href="Registration.html" th:href="@{/register}">Registered</a></button>
+
                 </div>
                 <div class="sec_leftWrite" sec:authorize = "isAuthenticated()">
                     <div class="sec_headline">

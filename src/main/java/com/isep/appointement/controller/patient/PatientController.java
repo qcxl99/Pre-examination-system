@@ -1,4 +1,4 @@
-package com.isep.appointement.controller;
+package com.isep.appointement.controller.patient;
 
 import com.isep.appointement.model.Patient;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -36,6 +36,7 @@ public class PatientController {
 
     @GetMapping("/patient/new")
     public String addPatient(Model model){
+
         model.addAttribute("patient", new Patient());
 
         return "addPatient";
@@ -57,11 +58,11 @@ public class PatientController {
         Patient existingPatient = patientService.getPatientById(id);
         existingPatient.setId(id);
         existingPatient.setName(patient.getName());
-        existingPatient.setUsername(patient.getUsername());
         existingPatient.setPassword(new BCryptPasswordEncoder().encode(patient.getPassword()));
         existingPatient.setTelephone(patient.getTelephone());
         existingPatient.setMail(patient.getMail());
         existingPatient.setIdNumber(patient.getIdNumber());
+        existingPatient.setBirthday(patient.getBirthday());
         existingPatient.setAge(patient.getAge());
         existingPatient.setSex(patient.getSex());
 

@@ -67,7 +67,7 @@ public class Patient implements UserDetails {
     @Lob
     private String geneticDiseases;
 
-    private Boolean locked;
+    private Boolean locked = true;
     private Boolean enabled;
 
     public Patient() {
@@ -101,6 +101,8 @@ public class Patient implements UserDetails {
         this.telephone = telephone;
         this.mail = mail;
         this.idNumber = idNumber;
+        this.enabled = false;
+        this.locked = true;
     }
 
 
@@ -137,17 +139,17 @@ public class Patient implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
-    public boolean isCredentialsNonExpired() {
+    public boolean isAccountNonLocked() {
         return locked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
     @Override
