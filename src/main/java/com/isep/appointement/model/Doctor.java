@@ -1,6 +1,10 @@
 package com.isep.appointement.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 @Table
@@ -10,20 +14,21 @@ public class Doctor {
     @Column(name = "id", nullable = false)
     private int idDoc;
 
-    @Column(name = "username", nullable = false, length = 50)
-    private String username;
-
     @Column(name = "password", nullable = false, length = 50)
     private String password;
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
+    @Column(name = "birthday")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate birthday;
+
     @Column(name = "age")
     private int age;
 
     @Column(name = "sex", nullable = false)
-    private int sex; // 0:female, 1:male, 2: other ...
+    private String sex;
 
     @Column(name = "phone", nullable = false, length = 20)
     private int telephone;
@@ -49,9 +54,8 @@ public class Doctor {
     @Column(name = "available_timings", length = 255)
     private String availableTimings;
 
-    public Doctor(int idDoc, String username, String password, String name, int age, int sex, int telephone, String mail, String educationBackground, String specialty, String title, String resume, String receptionRequirements, String availableTimings) {
+    public Doctor(int idDoc, String password, String name, int age, String sex, int telephone, String mail, String educationBackground, String specialty, String title, String resume, String receptionRequirements, String availableTimings) {
         this.idDoc = idDoc;
-        this.username = username;
         this.password = password;
         this.name = name;
         this.age = age;
@@ -68,11 +72,11 @@ public class Doctor {
 
     //Attributes necessary
 
-    public Doctor(int idDoc, String username, String password, String name, int telephone, String educationBackground, String specialty) {
+    public Doctor(int idDoc, String password, String name, LocalDate birthday, int telephone, String educationBackground, String specialty) {
         this.idDoc = idDoc;
-        this.username = username;
         this.password = password;
         this.name = name;
+        this.birthday = birthday;
         this.telephone = telephone;
         this.educationBackground = educationBackground;
         this.specialty = specialty;
@@ -83,14 +87,6 @@ public class Doctor {
 
     public void setIdDoc(int idDoc) {
         this.idDoc = idDoc;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
@@ -109,19 +105,30 @@ public class Doctor {
         this.name = name;
     }
 
+    public LocalDate getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
+
     public int getAge() {
-        return age;
+        if(birthday == null){
+            birthday = LocalDate.now();
+        }
+        return Period.between(birthday, LocalDate.now()).getYears();
     }
 
     public void setAge(int age) {
         this.age = age;
     }
 
-    public int getSex() {
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(int sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 

@@ -9,17 +9,31 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class homeController {
 
+
+    @GetMapping("/")
+    public String mainPage() {
+        return "首页";
+    }
+
     @GetMapping("/home")
     public String index() {
-        return "index";
+        return "首页";
     }
-/*
 
-    @GetMapping("/register")
-    public String register() {
-        return "register";
+    @GetMapping("/doctor")
+    public String doctor() {
+        return "医生";
     }
-*/
+
+    @GetMapping("/announcement")
+    public String announcement() {
+        return "公告";
+    }
+
+    @GetMapping("/science")
+    public String science() {
+        return "科普";
+    }
 
     @GetMapping("/pretriage")
     public String pretriage(){
