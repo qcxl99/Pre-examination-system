@@ -1,23 +1,18 @@
 package com.isep.appointement.controller.Registration;
 
 import com.isep.appointement.Repository.PatientRepository;
-import com.isep.appointement.controller.ConfirmationToken;
-import com.isep.appointement.controller.ConfirmationTokenService;
+import com.isep.appointement.controller.ConfirmToken.ConfirmationToken;
+import com.isep.appointement.controller.ConfirmToken.ConfirmationTokenService;
 import com.isep.appointement.controller.email.EmailSender;
 import com.isep.appointement.controller.patient.PatientService;
-import com.isep.appointement.model.Patient;
 import lombok.AllArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class RegistrationService {
 
     private ConfirmationTokenService confirmationTokenService;
@@ -25,12 +20,7 @@ public class RegistrationService {
     private EmailSender emailSender;
     private PatientRepository patientRepository;
 
-    public RegistrationService(ConfirmationTokenService confirmationTokenService, PatientService patientService, EmailSender emailSender, PatientRepository patientRepository) {
-        this.confirmationTokenService = confirmationTokenService;
-        this.patientService = patientService;
-        this.emailSender = emailSender;
-        this.patientRepository = patientRepository;
-    }
+
 
 /*    public String addPatient(Patient patient) {
         Optional<Patient> patientsByMail =  patientRepository.findPatientsByMail(patient.getMail());
@@ -59,7 +49,7 @@ public class RegistrationService {
         //TODO: send email;
         return token;
     }*/
-
+    @Transactional
     public String confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)

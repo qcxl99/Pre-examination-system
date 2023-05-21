@@ -1,17 +1,11 @@
 package com.isep.appointement.controller.patient;
 
-import com.isep.appointement.Repository.ConfirmationTokenRepository;
 import com.isep.appointement.Repository.PatientRepository;
-import com.isep.appointement.controller.ConfirmationToken;
-import com.isep.appointement.controller.ConfirmationTokenService;
-import com.isep.appointement.controller.Registration.RegistrationService;
+import com.isep.appointement.controller.ConfirmToken.ConfirmationToken;
+import com.isep.appointement.controller.ConfirmToken.ConfirmationTokenService;
 import com.isep.appointement.controller.email.EmailSender;
 import com.isep.appointement.model.Patient;
-import com.isep.appointement.model.Roles;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,17 +19,14 @@ import java.time.Period;
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class PatientService implements UserDetailsService {
 
     private final PatientRepository patientRepository;
     private final ConfirmationTokenService confirmationTokenService;
     private EmailSender emailSender;
     public static String LoginErrorMsg;
-    public PatientService(PatientRepository patientRepository, ConfirmationTokenService confirmationTokenService, EmailSender emailSender) {
-        this.patientRepository = patientRepository;
-        this.confirmationTokenService = confirmationTokenService;
-        this.emailSender = emailSender;
-    }
+
 
     public List<Patient> getAllPatient() {
 
@@ -79,7 +70,7 @@ public class PatientService implements UserDetailsService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(15),
+                LocalDateTime.now().plusHours(2),
                 patient
         );
         confirmationTokenService.saveConfirmationToken(confirmationToken);
@@ -130,9 +121,14 @@ public class PatientService implements UserDetailsService {
             LoginErrorMsg = "This email hasn't activated";
             throw new UsernameNotFoundException("This email hasn't activated");
         }
-        return new org.springframework.security.core.userdetails.User(patient.getMail(), patient.getPassword(),patient.isEnabled(),patient.isAccountNonExpired(),patient.isCredentialsNonExpired(),patient.isAccountNonLocked(), patient.getAuthorities());
+
+        return new org.springframework.security.core.userdetails.User(patient.getMail(),
+                patient.getPassword(),patient.isEnabled(),patient.isAccountNonExpired(),
+                patient.isCredentialsNonExpired(),patient.isAccountNonLocked(),
+                patient.getAuthorities());
 
     }
+
 /*    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(){
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(Roles.Patient.name());
         return Collections.singletonList(authority);
@@ -197,7 +193,7 @@ public class PatientService implements UserDetailsService {
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
                 "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
                 "        \n" +
-                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please click on the below link to activate your account: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Activate Now</a> </p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p>" +
+                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please click on the below link to activate your account: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Activate Now</a> </p></blockquote>\n Link will expire in 2 hours. <p>See you soon</p>" +
                 "        \n" +
                 "      </td>\n" +
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +

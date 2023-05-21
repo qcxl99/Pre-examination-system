@@ -1,4 +1,4 @@
-package com.isep.appointement.controller;
+package com.isep.appointement.controller.ConfirmToken;
 
 import com.isep.appointement.model.Patient;
 import lombok.AllArgsConstructor;
@@ -38,8 +38,6 @@ public class ConfirmationToken {
 
     public ConfirmationToken() {
     }
-
-
 
     public ConfirmationToken(String token, LocalDateTime createdAt, LocalDateTime expiredAt, Patient patient) {
         this.token = token;

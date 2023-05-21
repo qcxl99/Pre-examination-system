@@ -45,4 +45,9 @@ public class homeController {
         model.addAttribute("msg", "hello, please Signup");
         return "signup";
     }
+
+    @GetMapping("/access-denied")
+    public String accessDenied(){
+        return "access-denied";
+    }
 }

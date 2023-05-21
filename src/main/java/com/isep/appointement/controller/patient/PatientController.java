@@ -1,6 +1,7 @@
 package com.isep.appointement.controller.patient;
 
 import com.isep.appointement.model.Patient;
+import com.isep.appointement.model.Roles;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,9 +19,8 @@ public class PatientController {
     }
 
     @GetMapping("/hello")
-    public List<Patient> patient(){
-
-        return patientService.getAllPatient() ;
+    public List<Patient> patient(Long id){
+        return patientService.getAllPatient();
     }
 
 /*    @PostMapping
@@ -30,6 +30,10 @@ public class PatientController {
     }*/
     @GetMapping("/patient")
     public String showPatient(Model model){
+/*        String role = patient.getRole().name();
+        if(role != Roles.ADMIN.name()){
+            return "redirect:/home";
+        }*/
         model.addAttribute("patients", patientService.getAllPatient());
         return "patient";
     }

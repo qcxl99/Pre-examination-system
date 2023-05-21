@@ -37,7 +37,6 @@ public class RegistrationController {
     @GetMapping
     public String addPatient(Model model){
         model.addAttribute("patient", new Patient());
-
         return "Registration";
     }
 
