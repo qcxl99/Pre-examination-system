@@ -68,7 +68,7 @@ public class Patient implements UserDetails {
     private String geneticDiseases;
 
     private Boolean locked = true;
-    private Boolean enabled;
+    private Boolean enabled = false;
 
     public Patient() {
     }
