@@ -1,30 +1,63 @@
-package com.isep.appointement.controller.Registration;
+/*
+package com.isep.appointement.controller.doctor;
 
 import com.isep.appointement.Repository.PatientRepository;
 import com.isep.appointement.model.ConfirmationToken;
 import com.isep.appointement.controller.ConfirmToken.ConfirmationTokenService;
 import com.isep.appointement.controller.email.EmailSender;
-import com.isep.appointement.controller.patient.PatientService;
+import com.isep.appointement.model.Patient;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class RegistrationService {
+public class DoctorService implements UserDetailsService {
 
-    private ConfirmationTokenService confirmationTokenService;
-    private PatientService patientService;
+    private final PatientRepository patientRepository;
+    private final ConfirmationTokenService confirmationTokenService;
     private EmailSender emailSender;
-    private PatientRepository patientRepository;
+    public static String LoginErrorMsg;
 
 
+    public List<Patient> getAllPatient() {
 
-/*    public String addPatient(Patient patient) {
+        return patientRepository.findAll();
+    }
+    public Patient getPatientById(Long id) {
+
+        return patientRepository.findById(id).get();
+    }
+    public Patient getPatientByEmail(String email) {
+        Optional<Patient> patientsByEmail =  patientRepository.findPatientsByMail(email.toLowerCase(Locale.ROOT));
+        if(!patientsByEmail.isPresent() && !patientsByEmail.get().getEnabled()){
+            throw new IllegalStateException("patient email does not exist ");
+        }
+        return patientRepository.findPatientsByMail(email.toLowerCase(Locale.ROOT)).get();
+    }
+    public Patient getPatientByPhone(String telephone) {
+        Optional<Patient> patientsByPhone =  patientRepository.findPatientsByPhone(telephone);
+        if(!patientsByPhone.isPresent()){
+            throw new IllegalStateException("patient phone number does not exist ");
+        }
+        return patientRepository.findPatientsByMail(telephone).get();
+    }
+
+    public String addPatient(Patient patient) {
         Optional<Patient> patientsByMail =  patientRepository.findPatientsByMail(patient.getMail());
-        if(patientsByMail.isPresent()){
+        if(patientsByMail.isPresent() && !patientsByMail.get().getEnabled()){
             throw new IllegalStateException("email existed ");
 
         }
@@ -41,14 +74,18 @@ public class RegistrationService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(15),
+                LocalDateTime.now().plusHours(2),
                 patient
         );
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
         //TODO: send email;
+        String link = "http://localhost:8080/register/confirm?token=" + token;
+        emailSender.send(
+                patient.getMail(),
+                buildEmail(patient.getName(), link));
         return token;
-    }*/
+    }
     @Transactional
     public String confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService
@@ -67,12 +104,49 @@ public class RegistrationService {
         }
 
         confirmationTokenService.setConfirmedAt(token);
-        patientService.enableUser(
-                confirmationToken.getPatient().getMail());
-        return "confirmed";
+        enableUser(confirmationToken.getPatient().getMail());
+        return "redirect:/home";
+    }
+    public void editPatient(Patient patient) {
+        patientRepository.save(patient);
+    }
+    public void deletePatient(Long id) {
+        patientRepository.deleteById(id);
     }
 
-    private String buildEmail(String name, String link) {
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Patient patient = patientRepository.findPatientsByMail(username).get();
+        if(patient ==null){
+            LoginErrorMsg = "This email doesn't exist";
+            throw new UsernameNotFoundException("Invalid email or password");
+        }
+        else if(!patient.isEnabled()){
+            LoginErrorMsg = "This email hasn't activated";
+            throw new UsernameNotFoundException("This email hasn't activated");
+        }
+
+        return new org.springframework.security.core.userdetails.User(patient.getMail(),
+                patient.getPassword(),patient.isEnabled(),patient.isAccountNonExpired(),
+                patient.isCredentialsNonExpired(),patient.isAccountNonLocked(),
+                patient.getAuthorities());
+
+    }
+
+*/
+/*    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(){
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(Roles.Patient.name());
+        return Collections.singletonList(authority);
+    }*//*
+
+*/
+/*    public int enableAppointment(String email) {
+        return patientRepository.enablePatient(email);
+    }*//*
+
+
+    */
+/*private String buildEmail(String name, String link) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +
                 "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" +
@@ -128,7 +202,7 @@ public class RegistrationService {
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
                 "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
                 "        \n" +
-                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please click on the below link to activate your account: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Activate Now</a> </p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p>" +
+                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please click on the below link to activate your account: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Activate Now</a> </p></blockquote>\n Link will expire in 2 hours. <p>See you soon</p>" +
                 "        \n" +
                 "      </td>\n" +
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
@@ -139,6 +213,7 @@ public class RegistrationService {
                 "  </tbody></table><div class=\"yj6qo\"></div><div class=\"adL\">\n" +
                 "\n" +
                 "</div></div>";
-    }
-}
+    }*//*
 
+}
+*/

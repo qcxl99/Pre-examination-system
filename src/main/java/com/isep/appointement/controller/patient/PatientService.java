@@ -1,7 +1,7 @@
 package com.isep.appointement.controller.patient;
 
 import com.isep.appointement.Repository.PatientRepository;
-import com.isep.appointement.controller.ConfirmToken.ConfirmationToken;
+import com.isep.appointement.model.ConfirmationToken;
 import com.isep.appointement.controller.ConfirmToken.ConfirmationTokenService;
 import com.isep.appointement.controller.email.EmailSender;
 import com.isep.appointement.model.Patient;

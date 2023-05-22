@@ -1,14 +1,19 @@
 package com.isep.appointement.model;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Table
-public class Doctor {
+public class Doctor implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -36,6 +41,10 @@ public class Doctor {
     @Column(name = "email", length = 50)
     private String mail;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false, length = 20)
+    private Roles role = Roles.Doctor;
+
     @Column(name = "education_background", nullable = false, length = 50)
     private String educationBackground;
 
@@ -53,6 +62,9 @@ public class Doctor {
 
     @Column(name = "available_timings", length = 255)
     private String availableTimings;
+
+    public Doctor() {
+    }
 
     public Doctor(int idDoc, String password, String name, int age, String sex, int telephone, String mail, String educationBackground, String specialty, String title, String resume, String receptionRequirements, String availableTimings) {
         this.idDoc = idDoc;
@@ -89,8 +101,39 @@ public class Doctor {
         this.idDoc = idDoc;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
+        return Collections.singletonList(authority);
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return mail;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public void setPassword(String password) {
@@ -130,6 +173,14 @@ public class Doctor {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public Roles getRole() {
+        return role;
+    }
+
+    public void setRole(Roles role) {
+        this.role = role;
     }
 
     public int getTelephone() {

@@ -1,4 +1,4 @@
-package com.isep.appointement.controller.ConfirmToken;
+package com.isep.appointement.model;
 
 import com.isep.appointement.model.Patient;
 import lombok.AllArgsConstructor;

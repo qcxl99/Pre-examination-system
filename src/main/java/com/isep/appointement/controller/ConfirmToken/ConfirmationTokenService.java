@@ -1,6 +1,7 @@
 package com.isep.appointement.controller.ConfirmToken;
 
 import com.isep.appointement.Repository.ConfirmationTokenRepository;
+import com.isep.appointement.model.ConfirmationToken;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

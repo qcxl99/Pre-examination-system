@@ -1,6 +1,6 @@
 package com.isep.appointement.Repository;
 
-import com.isep.appointement.controller.ConfirmToken.ConfirmationToken;
+import com.isep.appointement.model.ConfirmationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
