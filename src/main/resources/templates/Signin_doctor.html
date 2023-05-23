@@ -8,6 +8,7 @@
         <title>Xiehe Hospital</title>
         <link rel="stylesheet" type="text/css" href="../static/newcss/styles.css">
 		<link rel="stylesheet" type="text/css" href="../static/assets/css/sce.css"/>
+
         <script src="../static/newjs/load-header.js"></script>
     <style>
 		.tem{background-image: url("../static/img/banner1.jpg");background-size: 100%;}
@@ -28,18 +29,11 @@
     <div id="header-placeholder"></div>
     <div class="background"></div>
     <div class="main-container">
-        <div class="signup-container">
-            <div class="card-header"><h3 class="text-center font-weight-light my-4">病人登录</h3></div>
-            <form th:action="@{/login}" method="post">
-                <!--error message-->
-                <div th:if = "${param.error}" >
-                    <div class="alert alert-danger" th:text="${Exception}">Invalid </div>
-                </div>
+        <div class="login-container">
 
-                <!--logout message-->
-                <div th:if = "${param.logout}">
-                    <div class="alert alert-info">You've been logged out </div>
-                </div>
+            <div class="card-header"><h3 class="text-center font-weight-light my-4">医生登录</h3></div>
+            <form th:action="@{/login}" method="post">
+
 
                 <label for="email">Email:</label>
                 <input type="email" id="username" name="username" required>
@@ -47,15 +41,25 @@
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
 
-                <button type="submit">Login</button>
+                <button type="submit" class="btn btn-success" >Login</button>
 
             </form>
-            <div class="form-group">
+<!--            <div class="form-group">
                 <span>
                     Not sign up?
                     <a href="/" th:href="@{/register}"> Sign up</a>
 
                 </span>
+            </div>-->
+
+            <!--error message-->
+            <div th:if = "${param.error}" >
+                <div class="alert alert-danger" >Invalid </div>
+            </div>
+
+            <!--logout message-->
+            <div th:if = "${param.logout}">
+                <div class="alert-info">You've been logged out </div>
             </div>
         </div>
     </div>

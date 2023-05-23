@@ -69,6 +69,7 @@ public class PatientController {
         existingPatient.setBirthday(patient.getBirthday());
         existingPatient.setAge(patient.getAge());
         existingPatient.setSex(patient.getSex());
+        existingPatient.setRole(patient.getRole());
 
         patientService.editPatient(existingPatient);
         return "redirect:/patient";

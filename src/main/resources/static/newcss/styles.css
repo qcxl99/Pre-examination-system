@@ -56,8 +56,8 @@ span.socialheader {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 300px;
-    height: 200px; /* 根据图片的宽高比调整高度 */
+    width: 350px;
+    height: 500px; /* 根据图片的宽高比调整高度 */
     border-radius: 10px;
 }
 
@@ -67,8 +67,8 @@ span.socialheader {
     background-size: cover; /* 将图片放大到填充整个容器 */
     background-repeat: no-repeat;
     background-position: center;
-    width: 300px;
-    height: 200px;
+    width: 360px;
+    height: 500px;
     border-radius: 10px;
 }
 
@@ -81,8 +81,8 @@ span.socialheader {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 300px;
-    height: 200px;
+    width: 360px;
+    height: 500px;
     border-radius: 10px; /* 新增的圆角边框 */
 }
 
