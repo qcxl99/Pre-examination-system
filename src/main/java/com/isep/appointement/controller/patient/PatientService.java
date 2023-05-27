@@ -53,10 +53,10 @@ public class PatientService implements UserDetailsService {
 
     public String addPatient(Patient patient) {
         Optional<Patient> patientsByMail =  patientRepository.findPatientsByMail(patient.getMail());
-        if(patientsByMail.isPresent() && !patientsByMail.get().getEnabled()){
+        if(patientsByMail.isPresent() && patientsByMail.get().getEnabled()){
             throw new IllegalStateException("email existed ");
-
         }
+
         LocalDate birthdate = patient.getBirthday();
         if(birthdate == null){
             birthdate = LocalDate.now();
@@ -100,7 +100,9 @@ public class PatientService implements UserDetailsService {
         }
 
         confirmationTokenService.setConfirmedAt(token);
-        enableUser(confirmationToken.getPatient().getMail());
+        enableUser(
+                confirmationToken.getPatient().getMail(),
+                confirmationToken.getPatient().getId());
         return "redirect:/home";
     }
     public void editPatient(Patient patient) {
@@ -133,8 +135,8 @@ public class PatientService implements UserDetailsService {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(Roles.Patient.name());
         return Collections.singletonList(authority);
     }*/
-    public int enableUser(String email) {
-        return patientRepository.enablePatient(email);
+    public int enableUser(String email, Long id) {
+        return patientRepository.enablePatient(email, id);
     }
 
     private String buildEmail(String name, String link) {

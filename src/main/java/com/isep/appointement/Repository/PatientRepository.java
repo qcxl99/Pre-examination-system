@@ -21,6 +21,6 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     @Modifying
     @Query("UPDATE Patient p " +
-            "SET p.enabled = TRUE, p.locked = true WHERE p.mail = ?1")
-    int enablePatient(String email);
+            "SET p.enabled = TRUE, p.locked = true WHERE p.mail = ?1 and p.id = ?1")
+    int enablePatient(String email, Long id);
 }

@@ -68,7 +68,8 @@ public class RegistrationService {
 
         confirmationTokenService.setConfirmedAt(token);
         patientService.enableUser(
-                confirmationToken.getPatient().getMail());
+                confirmationToken.getPatient().getMail(),
+                confirmationToken.getPatient().getId());
         return "confirmed";
     }
 
