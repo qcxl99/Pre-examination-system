@@ -38,11 +38,11 @@
   <table class="table">
     <thead class="thead-light">
     <tr>
-      <th scope="col">Name</th>
+      <th scope="col">Patient Name</th>
       <th scope="col">Age</th>
-      <th scope="col">Phone numbe</th>
+      <th scope="col">Email</th>
       <th scope="col">Sex</th>
-      <th scope="col">idNumber</th>
+      <th scope="col">Time</th>
       <th scope="col">Job</th>
       <th scope="col">Case</th>
       <th scope="col">allergens</th>
@@ -53,15 +53,15 @@
     <tbody>
 
     <tr th:each="patient: ${patients}">
-      <td th:text="${patient.id}"></td>
-      <td th:text="${patient.password}"></td>
       <td th:text="${patient.name}"></td>
-      <td th:text="${patient.mail}"></td>
-      <td th:text="${patient.telephone}"></td>
-      <td th:text="${patient.idNumber}"></td>
       <td th:text="${patient.getAge()}"></td>
-      <td th:text="${patient.getSex()}"></td>
-      <td th:text="${patient.getRole()}"></td>
+      <td th:text="${patient.mail}"></td>
+      <td th:text="${patient.sex}"></td>
+      <td th:text="${reservation.getTimeLine() }"></td>
+      <td th:text="${patient.job}"></td>
+      <td th:text="${patient.getCase()}"></td>
+      <td th:text="${patient.getAllergens()}"></td>
+      <td th:text="${patient.getGeneticDiseases()}"></td>
       <td>
         <a th:href="@{/patient/edit/{id}(id=${patient.id})}" class="btn btn-primary">Accept</a><br><br>
         <a th:href="@{/patient/{id}(id=${patient.id})}" class="btn btn-secondary">Refuse</a>

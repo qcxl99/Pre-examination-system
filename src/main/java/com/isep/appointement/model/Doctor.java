@@ -1,5 +1,6 @@
 package com.isep.appointement.model;
 
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,6 +14,7 @@ import java.util.Collections;
 
 @Entity
 @Table
+@ToString
 public class Doctor implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

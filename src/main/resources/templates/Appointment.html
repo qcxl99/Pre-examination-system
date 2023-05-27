@@ -50,7 +50,7 @@
   </div>
   <div class="row">
     <div class="co-lg-3">
-      <a th:href ="@{/patient/appoitment/new}" class="btn btn-primary btn-sm mb-3" >Add appointment</a>
+      <a th:href ="@{appointment/new}" class="btn btn-primary btn-sm mb-3" >Add appointment</a>
 
     </div>
 
@@ -60,8 +60,8 @@
     <thead class="thead-light">
     <tr>
       <th scope="col">id</th>
-      <th scope="col">Doctor name</th>
-      <th scope="col">Patient name</th>
+      <th scope="col">Doctor</th>
+      <th scope="col">Patient</th>
       <th scope="col">TimeLine</th>
       <th scope="col">location</th>
       <th scope="col">status</th>
@@ -74,12 +74,12 @@
     <tbody>
 
     <tr th:each="reservation: ${reservations}">
-      <td th:text="${reservation.id}"></td>
-      <td th:text="${reservation.doctor.name}"></td>
-      <td th:text="${reservation.patient.name}"></td>
-      <td th:text="${reservation.getTimeLine()}"></td>
-      <td th:text="${reservation.location}"></td>
-      <td th:text="${reservation.status}"></td>
+      <td th:text="${reservation.getId()}"></td>
+      <td th:text="${reservation.getDoctorName()}"></td>
+      <td th:text="${reservation.getPatientName()}"></td>
+      <td th:text="${reservation.getAppointmentTime()}"></td>
+      <td th:text="${reservation.getLocation()}"></td>
+      <td th:text="${reservation.getStatus()}"></td>
 <!--      <td th:text="${patient.getAge()}"></td>
       <td th:text="${patient.getSex()}"></td>
       <td th:text="${patient.getRole()}"></td>-->
