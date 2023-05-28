@@ -42,7 +42,13 @@
             <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
         </div>
     </form>
-
+    <!--<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+           aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+          <li><a class="dropdown-item" th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i>&nbsp;退出登录</a></li>
+        </ul>-->
     <style>
         .dropdown {
             position: relative;
@@ -92,24 +98,91 @@
 
 </nav>
 
+<h1>医生信息</h1>
 
-<div class="container">
-    <h1>Welcome to the Appointment Booking System</h1>
+<table>
+    <thead>
+    <tr>
+        &nbsp; <th>医生</th>
+        <th>隶属医院</th>
+        <th>隶属科室</th>
+        <th>具体地址</th>
+        <th>个人照片</th>
 
-    <h2>Please select a doctor:</h2>
-    <div id="doctor-list">
-        <!-- 动态生成医生列表 -->
-        <input type="text" id="doctorInput" placeholder="选择医生">
-    </div>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        &nbsp; <td>医生1</td>
+        <td>医院1</td>
+        <td>科室1</td>
+        <td>地址1</td>
+        <td><img src="doctor1.jpg" alt="医生1照片"></td>
+        <td><button onclick="submitAppointment()">Details</button><td>
 
-    <h2>Please select an appointment time:</h2>
-    <div class="datepicker-container">
-        <input type="datetime-local" id="timeInput" placeholder="选择预约时间">
-    </div>
-    <br>
-    <button onclick="submitAppointment()">confirm appointment</button>
-</div>
+    </tr>
+    <tr>
+        &nbsp; <td>医生2</td>
+        <td>医院2</td>
+        <td>科室2</td>
+        <td>地址2</td>
+        <td><img src="doctor2.jpg" alt="医生2照片"></td>
+        <td><button onclick="submitAppointment()">Details</button><td>
+    </tr>
+    <tr>
+        &nbsp; <td>医生2</td>
+        <td>医院2</td>
+        <td>科室2</td>
+        <td>地址2</td>
+        <td><img src="doctor2.jpg" alt="医生2照片"></td>
+        <td><button onclick="submitAppointment()">Details</button><td>
+    </tr> <tr>
+        &nbsp; <td>医生2</td>
+        <td>医院2</td>
+        <td>科室2</td>
+        <td>地址2</td>
+        <td><img src="doctor2.jpg" alt="医生2照片"></td>
+        <td><button onclick="submitAppointment()">Details</button><td>
+    </tr> <tr>
+        &nbsp; <td>医生2</td>
+        <td>医院2</td>
+        <td>科室2</td>
+        <td>地址2</td>
+        <td><img src="doctor2.jpg" alt="医生2照片"></td>
+        <td><button onclick="submitAppointment()">Details</button><td>
+    </tr> <tr>
+        &nbsp; <td>医生2</td>
+        <td>医院2</td>
+        <td>科室2</td>
+        <td>地址2</td>
+        <td><img src="doctor2.jpg" alt="医生2照片"></td>
+        <td><button onclick="submitAppointment()">Details</button><td>
+    </tr> <tr>
+        &nbsp; <td>医生2</td>
+        <td>医院2</td>
+        <td>科室2</td>
+        <td>地址2</td>
+        <td><img src="doctor2.jpg" alt="医生2照片"></td>
+        <td><button onclick="submitAppointment()">Details</button><td>
+    </tr> <tr>
+        &nbsp; <td>医生2</td>
+        <td>医院2</td>
+        <td>科室2</td>
+        <td>地址2</td>
+        <td><img src="doctor2.jpg" alt="医生2照片"></td>
+        <td><button onclick="submitAppointment()">Details</button><td>
+    </tr> <tr>
+        &nbsp; <td>医生2</td>
+        <td>医院2</td>
+        <td>科室2</td>
+        <td>地址2</td>
+        <td><img src="doctor2.jpg" alt="医生2照片"></td>
+        <td><button onclick="submitAppointment()">Details</button><td>
+    </tr>
+    </tbody>
+</table>
 
-<script src="js/script.js"></script>
+
+
 </body>
 </html>
