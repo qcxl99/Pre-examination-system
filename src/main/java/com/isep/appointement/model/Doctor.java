@@ -48,6 +48,10 @@ public class Doctor implements UserDetails {
     @Column(name = "deptName", nullable = false)
     private String deptName;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false, length = 20)
     private Roles role = Roles.Doctor;

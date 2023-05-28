@@ -1,9 +1,10 @@
 package com.isep.appointement.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "departments")
 public class Department {
 
     @Id
@@ -14,8 +15,8 @@ public class Department {
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @Column(name = "doctor")
-    private Doctor doctor;
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Doctor> doctors;
 
     public Department() {
     }
@@ -41,11 +42,11 @@ public class Department {
         this.name = name;
     }
 
-    public Doctor getDoctor() {
-        return doctor;
+    public Set<Doctor> getDoctors() {
+        return doctors;
     }
 
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
+    public void setDoctors(Set<Doctor> doctors) {
+        this.doctors = doctors;
     }
 }
