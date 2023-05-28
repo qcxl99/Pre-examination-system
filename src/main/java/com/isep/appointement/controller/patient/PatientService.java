@@ -42,19 +42,20 @@ public class PatientService implements UserDetailsService {
     }
 
 
+
     public Patient getPatientById(Long id) {
 
         return patientRepository.findById(id).get();
     }
     public Patient getPatientByEmail(String email) {
-        Optional<Patient> patientsByEmail =  patientRepository.findPatientsByMail(email.toLowerCase(Locale.ROOT));
+        Optional<Patient> patientsByEmail =  patientRepository.findPatientsByMail(email);
         if(!patientsByEmail.isPresent()){
             throw new IllegalStateException("patient email does not exist ");
         }
         else if(patientsByEmail.isPresent() && !patientsByEmail.get().getEnabled()){
             throw new IllegalStateException("patient email does not actived ");
         }
-        return patientRepository.findPatientsByMail(email.toLowerCase(Locale.ROOT)).get();
+        return patientRepository.findPatientsByMail(email).get();
     }
     public Patient getPatientByPhone(String telephone) {
         Optional<Patient> patientsByPhone =  patientRepository.findPatientsByPhone(telephone);

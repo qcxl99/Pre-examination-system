@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 
@@ -41,6 +42,12 @@ public class PatientController {
 /*        model.addAttribute("currentPage", patients.getNumber());
         model.addAttribute("totalPages", patients.getTotalPages());*/
         return "patient";
+    }
+    @GetMapping("/info/patient")
+    public String getPatient(Model model, Principal principal) {
+        model.addAttribute("patient", patientService.getPatientByEmail(principal.getName()));
+
+        return "patientShow";
     }
 
     @GetMapping("/patient/new")
@@ -79,7 +86,30 @@ public class PatientController {
         patientService.editPatient(existingPatient);
         return "redirect:/patient";
     }
+    @PostMapping("/info/patient/{id}")
+    public String saveChange(@PathVariable Long id, @ModelAttribute("patient") Patient patient, Model model){
+        Patient existingPatient = patientService.getPatientById(id);
+        existingPatient.setName(patient.getName());
+        existingPatient.setTelephone(patient.getTelephone());
+        existingPatient.setMail(patient.getMail());
+        existingPatient.setBirthday(patient.getBirthday());
+        existingPatient.setAge(patient.getAge());
+        existingPatient.setJob(patient.getJob());
+        existingPatient.setSex(patient.getSex());
+        existingPatient.setAddress(patient.getAddress());
+        existingPatient.setAllergens(patient.getAllergens());
+        existingPatient.setChronicDiseases(patient.getChronicDiseases());
+        existingPatient.setGeneticDiseases(patient.getGeneticDiseases());
 
+        patientService.editPatient(existingPatient);
+        return "redirect:/info/patient";
+    }
+    @GetMapping("/info/patient/edit/{id}")
+    public String ModifyInfo(@PathVariable Long id, Model model){
+        model.addAttribute("patient", patientService.getPatientById(id));
+
+        return "patientEdit";
+    }
     @GetMapping("/patient/{id}")
     public String RemovePatient(@PathVariable Long id){
         patientService.deletePatient(id);

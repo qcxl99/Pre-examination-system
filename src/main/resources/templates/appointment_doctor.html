@@ -70,11 +70,14 @@
   </div>
 </div>
 </nav>
-<h1>&nbsp;Welcome, <span th:text="${#authentication.principal.username}"></span>!</h1>
 <div class="container">
-  <div class="row">
-    <h1> List of patients</h1>
+  <h1 class="mt-4">Appointment</h1>
 
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="/" th:href="@{/info/doctor}">Personal Info</a></li>
+    <li class="breadcrumb-item active">Appointment</li>
+  </ol>
+  <div class="row">
   </div>
   <div class="row">
     <div class="co-lg-3">
