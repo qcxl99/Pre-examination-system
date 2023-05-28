@@ -25,12 +25,10 @@
     </div>
 
   </div>
-  <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-    <div class="input-group">
-      <input class="form-control" type="text" placeholder="search" aria-label="搜索"
+  <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" action="#" th:action="@{/patient}" method="get">>
+      <input type="text" id="keyword" name="keyword" class="form-control" placeholder="Enter keyword" aria-label="搜索"
              aria-describedby="btnNavbarSearch"/>
-      <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-    </div>
+      <button class="btn btn-primary" id="btnNavbarSearch" type="submit"><i class="fas fa-search"></i></button>
   </form>
   <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
     <li class="nav-item dropdown">
@@ -42,6 +40,7 @@
     </li>
   </ul>
 </nav>
+<h1>&nbsp;Welcome, <span th:text="${#authentication.principal.name}"></span>!</h1>
 <div class="container">
   <div class="row">
     <h1> List of patients</h1>
@@ -90,6 +89,17 @@
 
   </tbody>
 </table>
+  <!-- Pagination links -->
+  <div class="pagination">
+    <ul>
+      <li th:if="${patients.hasPrevious()}">
+        <a th:href="@{/patient(page=${patients.previousPageable().pageNumber})}">&laquo; Previous</a>
+      </li>
+      <li th:if="${patients.hasNext()}">
+        <a th:href="@{/patient(page=${patients.nextPageable().pageNumber})}">Next &raquo;</a>
+      </li>
+    </ul>
+  </div>
 </div>
 </body>
 </html>

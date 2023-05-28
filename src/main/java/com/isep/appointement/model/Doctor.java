@@ -1,5 +1,6 @@
 package com.isep.appointement.model;
 
+import lombok.AllArgsConstructor;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +16,7 @@ import java.util.Collections;
 @Entity
 @Table
 @ToString
+@AllArgsConstructor
 public class Doctor implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +45,9 @@ public class Doctor implements UserDetails {
     @Column(name = "email", length = 50)
     private String mail;
 
+    @Column(name = "deptName", nullable = false)
+    private String deptName;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false, length = 20)
     private Roles role = Roles.Doctor;
@@ -68,25 +73,8 @@ public class Doctor implements UserDetails {
     public Doctor() {
     }
 
-    public Doctor(int idDoc, String password, String name, int age, String sex, int telephone, String mail, String educationBackground, String specialty, String title, String resume, String receptionRequirements, String availableTimings) {
-        this.idDoc = idDoc;
-        this.password = password;
-        this.name = name;
-        this.age = age;
-        this.sex = sex;
-        this.telephone = telephone;
-        this.mail = mail;
-        this.educationBackground = educationBackground;
-        this.specialty = specialty;
-        this.title = title;
-        this.resume = resume;
-        this.receptionRequirements = receptionRequirements;
-        this.availableTimings = availableTimings;
-    }
-
     //Attributes necessary
-
-    public Doctor(int idDoc, String password, String name, LocalDate birthday, int telephone, String educationBackground, String specialty) {
+    public Doctor(int idDoc, String password, String name, LocalDate birthday, int telephone, String educationBackground, String specialty, String deptName) {
         this.idDoc = idDoc;
         this.password = password;
         this.name = name;
@@ -94,6 +82,7 @@ public class Doctor implements UserDetails {
         this.telephone = telephone;
         this.educationBackground = educationBackground;
         this.specialty = specialty;
+        this.deptName = deptName;
     }
     public int getIdDoc() {
         return idDoc;
@@ -200,6 +189,22 @@ public class Doctor implements UserDetails {
     public void setMail(String mail) {
         this.mail = mail;
     }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
+/*    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }*/
 
     public String getEducationBackground() {
         return educationBackground;

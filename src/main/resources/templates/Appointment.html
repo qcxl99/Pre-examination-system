@@ -12,7 +12,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#" th:href="@{/appoitment}">Appointment Management</a>
+  <a class="navbar-brand" href="#" th:href="@{/appointment}">Appointment Management</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -26,12 +26,10 @@
     </div>
 
   </div>
-  <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-    <div class="input-group">
-      <input class="form-control" type="text" placeholder="search" aria-label="搜索"
-             aria-describedby="btnNavbarSearch"/>
-      <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-    </div>
+  <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" action="#" th:action="@{/appointment}" method="get">>
+    <input type="text" id="keywordApp" name="keywordApp" class="form-control" placeholder="Enter keyword" aria-label="搜索"
+           aria-describedby="btnNavbarSearch"/>
+    <button class="btn btn-primary" id="btnNavbarSearch" type="submit"><i class="fas fa-search"></i></button>
   </form>
   <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
     <li class="nav-item dropdown">
@@ -43,6 +41,7 @@
     </li>
   </ul>
 </nav>
+<h1>&nbsp;Welcome, <span th:text="${#authentication.principal.username}"></span>!</h1>
 <div class="container">
   <div class="row">
     <h1> List of reservations</h1>
@@ -91,6 +90,17 @@
 
     </tbody>
   </table>
+  <!-- Pagination links -->
+  <div class="pagination">
+    <ul>
+      <li th:if="${reservations.hasPrevious()}">
+        <a th:href="@{/appointment(page=${reservations.previousPageable().pageNumber})}">&laquo; Previous</a>
+      </li>
+      <li th:if="${reservations.hasNext()}">
+        <a th:href="@{/appointment(page=${reservations.nextPageable().pageNumber})}">Next &raquo;</a>
+      </li>
+    </ul>
+  </div>
 </div>
 </body>
 </html>

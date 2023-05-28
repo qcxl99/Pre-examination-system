@@ -2,14 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
+        crossorigin="anonymous"></script>
 <head>
   <meta charset="UTF-8">
   <title>Appointment Management(Doctor)</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#" th:href="@{//doctor/appointment}">Appointment Management(Doctor)</a>
+  <a class="navbar-brand" href="#" th:href="@{/appointment/doctor}">Appointment Management(Doctor)</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -21,7 +22,22 @@
       <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true"></a>
     </div>
   </div>
+  <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" action="#" th:action="@{/appointment/doctor}" method="get">>
+    <input type="text" id="keywordDoc" name="keywordDoc" class="form-control" placeholder="Enter keyword" aria-label="搜索"
+           aria-describedby="btnNavbarSearch"/>
+    <button class="btn btn-primary" id="btnNavbarSearch" type="submit"><i class="fas fa-search"></i></button>
+  </form>
+  <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+         aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+        <li><a class="dropdown-item" th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i>&nbsp;退出登录</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
+<h1>&nbsp;Welcome, <span th:text="${#authentication.principal.username}"></span>!</h1>
 <div class="container">
   <div class="row">
     <h1> List of patients</h1>
@@ -29,7 +45,7 @@
   </div>
   <div class="row">
     <div class="co-lg-3">
-      <a th:href ="@{/doctor/appointment}" class="btn btn-primary btn-sm mb-3" >Add Patient</a>
+      <a th:href ="@{/appointment/doctor}" class="btn btn-primary btn-sm mb-3" >Add Appointment</a>
 
     </div>
 
@@ -38,6 +54,7 @@
   <table class="table">
     <thead class="thead-light">
     <tr>
+      <th scope="col">Id</th>
       <th scope="col">Patient Name</th>
       <th scope="col">Age</th>
       <th scope="col">Email</th>
@@ -47,29 +64,43 @@
       <th scope="col">Case</th>
       <th scope="col">allergens</th>
       <th scope="col">geneticDiseases</th>
+      <th scope="col">Appointment Status</th>
       <th scope="col">Action</th>
     </tr>
     </thead>
     <tbody>
 
-    <tr th:each="patient: ${patients}">
-      <td th:text="${patient.name}"></td>
-      <td th:text="${patient.getAge()}"></td>
-      <td th:text="${patient.mail}"></td>
-      <td th:text="${patient.sex}"></td>
-      <td th:text="${reservation.getTimeLine() }"></td>
-      <td th:text="${patient.job}"></td>
-      <td th:text="${patient.getCase()}"></td>
-      <td th:text="${patient.getAllergens()}"></td>
-      <td th:text="${patient.getGeneticDiseases()}"></td>
+    <tr th:each="reservation: ${reservations}">
+      <td th:text="${reservation.getId()}"></td>
+      <td th:text="${reservation.getPatientName()}"></td>
+      <td th:text="${reservation.getAppointmentTime()}"></td>
+      <td th:text="${reservation.patient.getAge()}"></td>
+      <td th:text="${reservation.patient.mail}"></td>
+      <td th:text="${reservation.patient.sex}"></td>
+      <td th:text="${reservation.patient.job}"></td>
+      <td th:text="${reservation.patient.getCase()}"></td>
+      <td th:text="${reservation.patient.getAllergens()}"></td>
+      <td th:text="${reservation.patient.getGeneticDiseases()}"></td>
+      <td th:text="${reservation.getStatus()}"></td>
       <td>
-        <a th:href="@{/patient/edit/{id}(id=${patient.id})}" class="btn btn-primary">Accept</a><br><br>
-        <a th:href="@{/patient/{id}(id=${patient.id})}" class="btn btn-secondary">Refuse</a>
+        <a th:href="@{/appointment/doctor/accept/{id}(id=${reservation.id})}" class="btn btn-primary">Accept</a><br><br>
+        <a th:href="@{/appointment/doctor/{id}(id=${reservation.id})}" class="btn btn-secondary">Refuse</a>
       </td>
     </tr>
 
     </tbody>
   </table>
+  <!-- Pagination links -->
+  <div class="pagination">
+    <ul>
+      <li th:if="${reservations.hasPrevious()}">
+        <a th:href="@{/appointment/doctor(page=${reservations.previousPageable().pageNumber})}">&laquo; Previous</a>
+      </li>
+      <li th:if="${reservations.hasNext()}">
+        <a th:href="@{/appointment/doctor(page=${reservations.nextPageable().pageNumber})}">Next &raquo;</a>
+      </li>
+    </ul>
+  </div>
 </div>
 </body>
 </html>

@@ -6,6 +6,9 @@ import com.isep.appointement.controller.ConfirmToken.ConfirmationTokenService;
 import com.isep.appointement.controller.email.EmailSender;
 import com.isep.appointement.model.Patient;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,19 +30,29 @@ public class PatientService implements UserDetailsService {
     private EmailSender emailSender;
     public static String LoginErrorMsg;
 
-
-    public List<Patient> getAllPatient() {
-
-        return patientRepository.findAll();
+    public Page<Patient> getAllPatients(Pageable pageable) {
+        return patientRepository.findAll(pageable);
     }
+    public Page<Patient> getPatientsByPageAndKeyword(int page, int size, String keyword) {
+        if (keyword != null && !keyword.isEmpty()) {
+            return patientRepository.findByKeyword(keyword, PageRequest.of(page, size));
+        } else {
+            return patientRepository.findAll(PageRequest.of(page, size));
+        }
+    }
+
+
     public Patient getPatientById(Long id) {
 
         return patientRepository.findById(id).get();
     }
     public Patient getPatientByEmail(String email) {
         Optional<Patient> patientsByEmail =  patientRepository.findPatientsByMail(email.toLowerCase(Locale.ROOT));
-        if(!patientsByEmail.isPresent() && !patientsByEmail.get().getEnabled()){
+        if(!patientsByEmail.isPresent()){
             throw new IllegalStateException("patient email does not exist ");
+        }
+        else if(patientsByEmail.isPresent() && !patientsByEmail.get().getEnabled()){
+            throw new IllegalStateException("patient email does not actived ");
         }
         return patientRepository.findPatientsByMail(email.toLowerCase(Locale.ROOT)).get();
     }
@@ -49,6 +62,13 @@ public class PatientService implements UserDetailsService {
             throw new IllegalStateException("patient phone number does not exist ");
         }
         return patientRepository.findPatientsByMail(telephone).get();
+    }
+    public Patient getPatientByName(String name) {
+        Optional<Patient> patientsByName =  patientRepository.findPatientsByName(name);
+        if(!patientsByName.isPresent()){
+            throw new IllegalStateException("patient phone number does not exist ");
+        }
+        return patientRepository.findPatientsByName(name).get();
     }
 
     public String addPatient(Patient patient) {
@@ -100,9 +120,7 @@ public class PatientService implements UserDetailsService {
         }
 
         confirmationTokenService.setConfirmedAt(token);
-        enableUser(
-                confirmationToken.getPatient().getMail(),
-                confirmationToken.getPatient().getId());
+        enableUser(confirmationToken.getPatient().getMail());
         return "redirect:/home";
     }
     public void editPatient(Patient patient) {
@@ -135,8 +153,8 @@ public class PatientService implements UserDetailsService {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(Roles.Patient.name());
         return Collections.singletonList(authority);
     }*/
-    public int enableUser(String email, Long id) {
-        return patientRepository.enablePatient(email, id);
+    public int enableUser(String email) {
+        return patientRepository.enablePatient(email);
     }
 
     private String buildEmail(String name, String link) {

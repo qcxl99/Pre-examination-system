@@ -38,8 +38,9 @@ public class Reservation {
     @Column
     private String location;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status;
+    private AppointmentStatus status;
 
     public String getAppointmentTime() {
 /*        if(appointmentTime != null){

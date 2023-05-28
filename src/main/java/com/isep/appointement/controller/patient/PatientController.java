@@ -1,13 +1,17 @@
 package com.isep.appointement.controller.patient;
 
+import com.isep.appointement.Repository.PatientRepository;
 import com.isep.appointement.model.Patient;
 import com.isep.appointement.model.Roles;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @Controller
 public class PatientController {
@@ -18,10 +22,10 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    @GetMapping("/hello")
+/*    @GetMapping("/hello")
     public List<Patient> patient(Long id){
         return patientService.getAllPatient();
-    }
+    }*/
 
 /*    @PostMapping
     public void registerNewPatient(@RequestBody Patient patient){
@@ -29,12 +33,13 @@ public class PatientController {
         patientService.addPatient(patient);
     }*/
     @GetMapping("/patient")
-    public String showPatient(Model model){
-/*        String role = patient.getRole().name();
-        if(role != Roles.ADMIN.name()){
-            return "redirect:/home";
-        }*/
-        model.addAttribute("patients", patientService.getAllPatient());
+    public String getPatientsByPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String keyword,Model model) {
+        model.addAttribute("patients", patientService.getPatientsByPageAndKeyword(page,size,keyword));
+/*        model.addAttribute("currentPage", patients.getNumber());
+        model.addAttribute("totalPages", patients.getTotalPages());*/
         return "patient";
     }
 
