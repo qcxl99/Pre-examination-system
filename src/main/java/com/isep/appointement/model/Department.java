@@ -18,6 +18,10 @@ public class Department {
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Doctor> doctors;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hospital_id", nullable = false)
+    private Set<Hospital> hospital;
+
     public Department() {
     }
 

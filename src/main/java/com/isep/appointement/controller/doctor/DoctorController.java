@@ -57,7 +57,7 @@ public class DoctorController {
         existingDoctor.setBirthday(doctor.getBirthday());
         existingDoctor.setAge(doctor.getAge());
         existingDoctor.setSex(doctor.getSex());
-
+        existingDoctor.setHospitalName(doctor.getHospitalName());
         doctorService.editDoctor(existingDoctor);
         return "redirect:/doctor";
     }
@@ -71,6 +71,8 @@ public class DoctorController {
         existingDoctor.setBirthday(doctor.getBirthday());
         existingDoctor.setAge(doctor.getAge());
         existingDoctor.setSex(doctor.getSex());
+        existingDoctor.setDeptName(doctor.getDeptName());
+        existingDoctor.setHospitalName(doctor.getHospitalName());
         existingDoctor.setAvailableTimings(doctor.getAvailableTimings());
         existingDoctor.setEducationBackground(doctor.getEducationBackground());
         existingDoctor.setResume(doctor.getResume());

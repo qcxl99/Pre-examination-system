@@ -98,8 +98,9 @@
       <th scope="col">Time</th>
       <th scope="col">Job</th>
       <th scope="col">Case</th>
-      <th scope="col">allergens</th>
-      <th scope="col">geneticDiseases</th>
+      <th scope="col">Allergens</th>
+      <th scope="col">ChronicDiseases</th>
+      <th scope="col">GeneticDiseases</th>
       <th scope="col">Appointment Status</th>
       <th scope="col">Action</th>
     </tr>
@@ -109,12 +110,12 @@
     <tr th:each="reservation: ${reservations}">
       <td th:text="${reservation.getId()}"></td>
       <td th:text="${reservation.getPatientName()}"></td>
-      <td th:text="${reservation.getAppointmentTime()}"></td>
       <td th:text="${reservation.patient.getAge()}"></td>
       <td th:text="${reservation.patient.mail}"></td>
       <td th:text="${reservation.patient.sex}"></td>
+      <td th:text="${reservation.getAppointmentTime()}"></td>
       <td th:text="${reservation.patient.job}"></td>
-      <td th:text="${reservation.patient.getCase()}"></td>
+      <td th:text="${reservation.patient.getCaseImg()}"></td>
       <td th:text="${reservation.patient.getAllergens()}"></td>
       <td th:text="${reservation.patient.getChronicDiseases()}"></td>
       <td th:text="${reservation.patient.getGeneticDiseases()}"></td>

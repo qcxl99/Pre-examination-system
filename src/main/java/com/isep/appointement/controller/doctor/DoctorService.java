@@ -46,7 +46,9 @@ public class DoctorService implements UserDetailsService {
         }
         return doctorRepository.findByMail(email).get();
     }
-
+    public Hospital getHospitalOfDoc(Doctor doctor){
+        return doctorRepository.findHosOfDoc(doctor.getIdDoc()).get();
+    }
 
   public Doctor addDoctor(Doctor doctor) {
       LocalDate birthdate = doctor.getBirthday();
@@ -57,7 +59,6 @@ public class DoctorService implements UserDetailsService {
       doctor.setAge(age);
       doctor.setPassword(new BCryptPasswordEncoder().encode(doctor.getPassword()));
       doctor.setRole(Roles.Doctor);
-      doctor.setDepartment(doctorRepository.findDeptByName(doctor.getDeptName()).get());
 
       return doctorRepository.save(doctor);
   }
@@ -68,8 +69,8 @@ public class DoctorService implements UserDetailsService {
         doctorRepository.deleteById(id);
     }
     @Override
-    public UserDetails loadUserByUsername(String usernameDoc) throws UsernameNotFoundException {
-        Doctor doctor = doctorRepository.findByMail(usernameDoc).get();
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Doctor doctor = doctorRepository.findByMail(username).get();
         if(doctor ==null){
             throw new UsernameNotFoundException("Invalid email or password");
         }

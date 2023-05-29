@@ -2,6 +2,7 @@ package com.isep.appointement.Repository;
 
 import com.isep.appointement.model.Department;
 import com.isep.appointement.model.Doctor;
+import com.isep.appointement.model.Hospital;
 import com.isep.appointement.model.Patient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.print.Doc;
 import java.util.Optional;
 
 
@@ -24,6 +26,9 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
     @Query("SELECT dept from Department dept where dept.name = ?1")
     Optional<Department> findDeptByName(String name);
+
+    @Query("SELECT h FROM Hospital h where h.id = (SELECT d.hospital from Doctor d where d.idDoc = :id)")
+    Optional<Hospital> findHosOfDoc(Long id);
 /*    @Modifying
     @Query("UPDATE Doctor d " +
             "SET d.enabled = TRUE, d.locked = true WHERE d.mail = ?1")

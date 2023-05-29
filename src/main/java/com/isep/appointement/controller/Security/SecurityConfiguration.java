@@ -30,6 +30,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.ServletException;
@@ -66,7 +67,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return daoAuthenticationProvider;
     }
 
-    protected  void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
+    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
         authenticationManagerBuilder
                 .authenticationProvider(daoAuthenticationProvider())
                 .authenticationProvider(doctorDaoAuthenticationProvider());
@@ -85,6 +86,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/home**",
                 "/register/**").permitAll()
                 .antMatchers("/patient**","patient/**").hasAuthority("ADMIN")
+                .antMatchers("/login").hasAuthority("Patient")
+                .antMatchers("/login/doctor").hasAuthority("Doctor")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
@@ -95,7 +98,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .defaultSuccessUrl("/info/patient")
                 .loginPage("/login/doctor")
+                .defaultSuccessUrl("/info/doctor")
                 .permitAll()
                 .and()
                 .logout()

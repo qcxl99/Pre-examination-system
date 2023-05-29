@@ -2,6 +2,7 @@ package com.isep.appointement.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +19,7 @@ import java.util.Set;
 @Entity
 @Table
 @Getter
+@Setter
 @ToString
 @AllArgsConstructor
 public class Doctor implements UserDetails {
@@ -48,8 +50,13 @@ public class Doctor implements UserDetails {
     @Column(name = "email", length = 50)
     private String mail;
 
+    private String hospitalName;
     @Column(name = "deptName", nullable = false)
     private String deptName;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "hospital_id", nullable = false)
+    private Hospital hospital;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "department_id", nullable = false)
