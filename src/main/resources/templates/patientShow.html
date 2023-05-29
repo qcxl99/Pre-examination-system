@@ -75,33 +75,33 @@
   <div id="layoutSidenav_content">
     <main>
       <div class="container-fluid px-4">
-        <h1 class="mt-4">个人信息</h1>
+        <h1 class="mt-4">Personal Info</h1>
 
         <ol class="breadcrumb mb-4">
-          <li class="breadcrumb-item"><a href="/" th:href="@{/info/patient}">主页</a></li>
-          <li class="breadcrumb-item active">个人信息</li>
+          <li class="breadcrumb-item"><a href="/" th:href="@{/info/patient}">Info</a></li>
+          <li class="breadcrumb-item active">Personal Info</li>
         </ol>
 
         <div class="card mb-4" th:object="${patient}">
           <table class="table table-hover" >
             <tr>
-              <td text-align="center">账号/email：</td>
+              <td text-align="center">Account/email：</td>
               <td th:text="${patient.getMail()}"></td>
             </tr>
             <tr>
-              <td text-align="center">姓名：</td>
+              <td text-align="center">Name：</td>
               <td th:text="${patient.name}"></td>
             </tr>
             <tr>
-              <td text-align="center">性别：</td>
+              <td text-align="center">Sex：</td>
               <td th:text="${patient.getSex()}"></td>
             </tr>
             <tr>
-              <td text-align="center">年龄：</td>
+              <td text-align="center">Age：</td>
               <td th:text="${patient.getAge()}"></td>
             </tr>
             <tr>
-              <td text-align="center">联系方式：</td>
+              <td text-align="center">Contact：</td>
               <td th:text="${patient.telephone}"></td>
             </tr>
             <tr>

@@ -1,6 +1,7 @@
 package com.isep.appointement.controller.Security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.isep.appointement.controller.doctor.DoctorService;
 import com.isep.appointement.controller.patient.PatientService;
 import com.isep.appointement.model.Roles;
 import lombok.AllArgsConstructor;
@@ -43,6 +44,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private PatientService patientService;
+    @Autowired
+    private DoctorService doctorService;
     @Qualifier("delegatedAuthenticationEntryPoint")
     AuthenticationEntryPoint authEntryPoint;
 
@@ -55,9 +58,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return dauth;
     }
 
+    @Bean
+    public DaoAuthenticationProvider doctorDaoAuthenticationProvider(){
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(doctorService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return daoAuthenticationProvider;
+    }
 
     protected  void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
-        authenticationManagerBuilder.authenticationProvider(daoAuthenticationProvider());
+        authenticationManagerBuilder
+                .authenticationProvider(daoAuthenticationProvider())
+                .authenticationProvider(doctorDaoAuthenticationProvider());
     }
 
     @Override
@@ -83,6 +95,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .loginPage("/login/doctor")
                 .permitAll()
                 .and()
                 .logout()
@@ -107,4 +120,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
 
     }
+
 }

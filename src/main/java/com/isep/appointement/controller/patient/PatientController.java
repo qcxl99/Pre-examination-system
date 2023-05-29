@@ -23,16 +23,7 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-/*    @GetMapping("/hello")
-    public List<Patient> patient(Long id){
-        return patientService.getAllPatient();
-    }*/
 
-/*    @PostMapping
-    public void registerNewPatient(@RequestBody Patient patient){
-
-        patientService.addPatient(patient);
-    }*/
     @GetMapping("/patient")
     public String getPatientsByPage(
             @RequestParam(defaultValue = "0") int page,
@@ -57,17 +48,18 @@ public class PatientController {
 
         return "addPatient";
     }
-    @GetMapping("/patient/edit/{id}")
-    public String editPatient(@PathVariable Long id, Model model){
-        model.addAttribute("patient", patientService.getPatientById(id));
 
-        return "edit_Patient";
-    }
     @PostMapping("/patient")
     public String savePatient(@ModelAttribute("patient") Patient patient){
         patientService.addPatient(patient);
 
         return "redirect:/patient/new?success";
+    }
+    @GetMapping("/patient/edit/{id}")
+    public String editPatient(@PathVariable Long id, Model model){
+        model.addAttribute("patient", patientService.getPatientById(id));
+
+        return "edit_Patient";
     }
     @PostMapping("/patient/{id}")
     public String UpdatePatient(@PathVariable Long id, @ModelAttribute("patient") Patient patient, Model model){

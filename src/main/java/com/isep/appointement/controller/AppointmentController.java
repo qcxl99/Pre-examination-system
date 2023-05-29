@@ -1,5 +1,6 @@
 package com.isep.appointement.controller;
 
+import com.isep.appointement.Repository.DoctorRepository;
 import com.isep.appointement.controller.patient.PatientService;
 import com.isep.appointement.model.*;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import java.security.Principal;
 public class AppointmentController {
     private final AppointmentService appointmentService;
     private final PatientService patientService;
+    private final DoctorRepository doctorRepository;
 //admin
     @GetMapping("/appointment")
     public String showAllAppointmentbyKeyword(
@@ -105,8 +107,8 @@ public class AppointmentController {
      @RequestParam(defaultValue = "10") int size,
      @RequestParam(required = false) String keywordDoc,Model model, Principal principal){
         String email = principal.getName();
-
-        model.addAttribute("reservations", appointmentService.getAppointmentsByPageAndKeyword(page,size,keywordDoc));
+        Doctor doctor = doctorRepository.findByMail(email).get();
+        model.addAttribute("reservations", appointmentService.getAppointmentsDoctor(page,size,keywordDoc, doctor));
         return "appointment_doctor";
     }
     @GetMapping("/appointment/doctor/accept/{id}")

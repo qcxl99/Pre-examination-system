@@ -1,6 +1,7 @@
 package com.isep.appointement.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,18 +13,20 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 @Entity
 @Table
+@Getter
 @ToString
 @AllArgsConstructor
 public class Doctor implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private int idDoc;
+    private Long idDoc;
 
-    @Column(name = "password", nullable = false, length = 50)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "name", nullable = false, length = 50)
@@ -52,6 +55,9 @@ public class Doctor implements UserDetails {
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Reservation> reservations;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false, length = 20)
     private Roles role = Roles.Doctor;
@@ -78,7 +84,7 @@ public class Doctor implements UserDetails {
     }
 
     //Attributes necessary
-    public Doctor(int idDoc, String password, String name, LocalDate birthday, int telephone, String educationBackground, String specialty, String deptName) {
+    public Doctor(Long idDoc, String password, String name, LocalDate birthday, int telephone, String educationBackground, String specialty, String deptName) {
         this.idDoc = idDoc;
         this.password = password;
         this.name = name;
@@ -88,11 +94,11 @@ public class Doctor implements UserDetails {
         this.specialty = specialty;
         this.deptName = deptName;
     }
-    public int getIdDoc() {
+    public Long getIdDoc() {
         return idDoc;
     }
 
-    public void setIdDoc(int idDoc) {
+    public void setIdDoc(Long idDoc) {
         this.idDoc = idDoc;
     }
 
@@ -202,13 +208,13 @@ public class Doctor implements UserDetails {
         this.deptName = deptName;
     }
 
-/*    public Department getDepartment() {
+    public Department getDepartment() {
         return department;
     }
 
     public void setDepartment(Department department) {
         this.department = department;
-    }*/
+    }
 
     public String getEducationBackground() {
         return educationBackground;

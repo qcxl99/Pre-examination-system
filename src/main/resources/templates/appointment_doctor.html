@@ -116,11 +116,12 @@
       <td th:text="${reservation.patient.job}"></td>
       <td th:text="${reservation.patient.getCase()}"></td>
       <td th:text="${reservation.patient.getAllergens()}"></td>
+      <td th:text="${reservation.patient.getChronicDiseases()}"></td>
       <td th:text="${reservation.patient.getGeneticDiseases()}"></td>
       <td th:text="${reservation.getStatus()}"></td>
       <td>
-        <a th:href="@{/appointment/doctor/accept/{id}(id=${reservation.id})}" class="btn btn-primary">Accept</a><br><br>
-        <a th:href="@{/appointment/doctor/{id}(id=${reservation.id})}" class="btn btn-secondary">Refuse</a>
+        <a th:href="@{/appointment/doctor/accept/{id}(id=${reservation.id})}" class="btn btn-success">Accept</a><br><br>
+        <a th:href="@{/appointment/doctor/{id}(id=${reservation.id})}" class="btn btn-danger">Refuse</a>
       </td>
     </tr>
 

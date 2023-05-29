@@ -26,9 +26,10 @@ public class Reservation {
     @Column(nullable = false)
     private String appointmentTime;
 
-    @Column
+    @ManyToOne(fetch = FetchType.LAZY)
     private Doctor doctor;
-    @Column
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private Patient patient;
 
     @Column(nullable = false)
