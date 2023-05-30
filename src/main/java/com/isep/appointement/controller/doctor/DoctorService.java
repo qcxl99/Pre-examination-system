@@ -39,10 +39,10 @@ public class DoctorService implements UserDetailsService {
 
         return doctorRepository.findById(id).get();
     }
-    public Doctor getPatientByEmail(String email) {
+    public Doctor getDoctorByEmail(String email) {
         Optional<Doctor> patientsByEmail =  doctorRepository.findByMail(email);
         if(!patientsByEmail.isPresent()){
-            throw new IllegalStateException("patient email does not exist ");
+            throw new IllegalStateException("doctor email does not exist ");
         }
         return doctorRepository.findByMail(email).get();
     }

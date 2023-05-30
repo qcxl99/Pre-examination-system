@@ -12,6 +12,7 @@
     </style>
 </head>
 <body>
+
 <h1>请问您哪里不舒服？</h1>
 <div class="select-container">
     <select class="styled-select" id="discomfortLocation" onchange="displayQuestions()">
@@ -98,7 +99,8 @@
     <div id="popup" class="popup">
         <h2>建议您找：</h2>
         <p id="department"></p>
-        <button onclick="returnToSelection()">返回</button>
+        <a href="/.."> <button onclick="returnToSelection()">Return</button></a>
+        <a href="/appointment/patient/search"> <button>New Reservation</button></a>
     </div>
 </div>
 

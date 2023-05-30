@@ -29,10 +29,10 @@
         <div class="sec_nav container">
             <ul id="enter" class="flexBox flexCenter">
                 <li><a href="/home">Home</a></li>
-                <li><a href="/ourDoctor">Doctor</a></li>
+                <li><a th:href="@{/personal}">Personal</a></li>
                 <li><a href="/announcement">Announcement</a></li>
                 <li><a href="/science">Science</a></li>
-				<li><a href="/register">Registration</a></li>
+				<li><a href="/appointment/patient/search">Reservation</a></li>
             </ul>
         </div>
         <div class="sec_bgback">
@@ -45,7 +45,7 @@
                     <div sec:authorize = "isAuthenticated()"><button><a href="/" th:href="@{/logout}">Logout</a></button></div>
 
                     <h2><br></h2>
-                    <button><a href="Registration.html" th:href="@{/register}">Register</a></button>
+                    <button><a href="/" th:href="@{/register}">Register</a></button>
 
                 </div>
 <!--                <div class="sec_leftWrite" >
@@ -84,11 +84,11 @@
     <footer>
         <div class="footbody container">
             <ul class="flexBox flexCenter">
-                <li>About us</li>
-                <li class="bigWrite"><a href="/home">Xiehe Hospital</a></li>
+                <a href="/aboutus"><li>About us</li></a>
+                <li class="bigWrite"><a href="/home">Wahaha</a></li>
                 <li>Sggestions</li>    
             </ul>
-            <p>Contact us</p>
+            <a href="/contactus"><p>Contact us</p></a>
             <p>XXX-XXXX-XXXX</p>
         </div>
     </footer>

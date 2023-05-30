@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @Controller
 public class DoctorController {
 
@@ -27,7 +29,11 @@ public class DoctorController {
         model.addAttribute("doctors", doctorService.getDoctorsByPageAndKeyword(page, size, keyword));
         return "doctor";
     }
-
+    @GetMapping("/info/doctor")
+    public String showDoctorInfo(Model model, Principal principal) {
+        model.addAttribute("doctor", doctorService.getDoctorByEmail(principal.getName()));
+        return "doctorInfo";
+    }
     @GetMapping("/doctor/new")
     public String addDoctor(Model model){
 
@@ -61,13 +67,12 @@ public class DoctorController {
         doctorService.editDoctor(existingDoctor);
         return "redirect:/doctor";
     }
-    @PostMapping("/info/doctor/{id}")
-    public String UpdateInfo(@PathVariable Long id, @ModelAttribute("doctor") Doctor doctor, Model model){
-        Doctor existingDoctor = doctorService.getDoctorById(id);
+    @PostMapping("/info/doctor/save")
+    public String UpdateInfo(@ModelAttribute("doctor") Doctor doctor, Model model, Principal principal){
+        Doctor existingDoctor = doctorService.getDoctorByEmail(principal.getName());
         existingDoctor.setName(doctor.getName());
         existingDoctor.setTelephone(doctor.getTelephone());
         existingDoctor.setMail(doctor.getMail());
-        existingDoctor.setDepartment(doctor.getDepartment());
         existingDoctor.setBirthday(doctor.getBirthday());
         existingDoctor.setAge(doctor.getAge());
         existingDoctor.setSex(doctor.getSex());

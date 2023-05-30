@@ -30,6 +30,7 @@ public class PatientService implements UserDetailsService {
     private EmailSender emailSender;
     public static String LoginErrorMsg;
 
+
     public Page<Patient> getAllPatients(Pageable pageable) {
         return patientRepository.findAll(pageable);
     }

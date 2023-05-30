@@ -69,25 +69,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
         authenticationManagerBuilder
-                .authenticationProvider(daoAuthenticationProvider())
+/*                .authenticationProvider(daoAuthenticationProvider())*/
                 .authenticationProvider(doctorDaoAuthenticationProvider());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeRequests().antMatchers("/register**",
-                "/static/**",
-                "/static/assets**",
-                "/static/assets/**",
-                "/css/**",
-                "/js/**",
-                "/img/**",
-                "/home**",
-                "/register/**").permitAll()
+                .authorizeRequests()
+                .antMatchers("/register**",
+                        "/static/**",
+                        "/static/assets**",
+                        "/static/assets/**",
+                        "/css/**",
+                        "/js/**",
+                        "/img/**",
+                        "/home**",
+                        "/register/**").permitAll()
                 .antMatchers("/patient**","patient/**").hasAuthority("ADMIN")
-                .antMatchers("/login").hasAuthority("Patient")
-                .antMatchers("/login/doctor").hasAuthority("Doctor")
+                .antMatchers("/info/doctor").hasAnyAuthority("Doctor","ADMIN")
+                .antMatchers("/info/patient").hasAnyAuthority("Patient","ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
@@ -98,7 +99,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/info/patient")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/home")
                 .loginPage("/login/doctor")
                 .defaultSuccessUrl("/info/doctor")
                 .permitAll()
@@ -108,8 +110,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login?logout")
-                .permitAll()
-                ;
+                .permitAll();
+
     }
 
 
