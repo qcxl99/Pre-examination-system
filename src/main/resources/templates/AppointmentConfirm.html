@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/patientShow.css}"href="../static/css/patientShow.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/patientShow.css}" href="../static/css/patientShow.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
@@ -114,7 +114,7 @@
 
 
         <div class="form-image">
-            <img src="../static/img/doc-2.jpg"th:src="@{/img/doc-2.jpg}" alt="照片" width="240" height="210">
+            <img src="../static/img/doc-2.jpg" th:src="@{/img/doc-2.jpg}" alt="照片" width="240" height="210">
         </div>
 
         <center>
@@ -155,6 +155,11 @@
                     <td>Hospital:</td>
                     <td th:text="${doctor.hospital.getName()}">Hospital 1</td>
                 </tr>
+                </tr>
+                <tr>
+                    <td>Available time:</td>
+                    <td id = "availableTimings" th:text="${doctor.availableTimings}">monday-friday 10:00 - 20:00</td>
+                </tr>
                 <!-- Add more rows for additional fields and values -->
             </table>
 
@@ -162,22 +167,116 @@
         <br>
     </div>
     <!--h1>Welcome to the Appointment Booking System</h1-->
-                    <form th:action="@{/appointment/patient/new/{idDoc}(idDoc=${doctor.idDoc})}" th:object="${reservation}" method="post">
+                    <form th:action="@{/appointment/patient/new/{idDoc}(idDoc=${doctor.idDoc})}" th:object="${reservation}" method="post" onsubmit="return validateForm()">
         <div class="left-section">
             <h2>Please select an appointment time:</h2>
             <div class="datepicker-container">
                 <input type="datetime-local" id="timeInput" th:field ="*{appointmentTime}">
             </div>
             <br></div>
-
-
-
     <br>
     <center>
         <button type="submit">confirm appointment</button>
     </center>
                 </form>
-    <script src="js/script.js"></script>
+    <script >
+        function validateForm() {
+            // Get the selected appointment time
+            var appointmentTime = document.getElementById("timeInput").value;
+
+            // Convert the appointment time to a JavaScript Date object
+            var selectedDate = new Date(appointmentTime);
+
+            // Get the day of the week (0 = Sunday, 1 = Monday, ...)
+            var dayOfWeek = selectedDate.getDay();
+
+            // Get the hours and minutes of the appointment time
+            var hours = selectedDate.getHours();
+            var minutes = selectedDate.getMinutes();
+
+            // Check if the selected appointment time is valid
+            if (hours < 7 || hours > 22) {
+                alert("Appointment time must be between 7:00 AM and 10:00 PM.");
+                return false; // Prevent form submission
+            }
+
+            if (dayOfWeek === 0) {
+                alert("Appointments cannot be scheduled on Sundays.");
+                return false; // Prevent form submission
+            }
+
+            // Check the doctor's available timings
+            var availableTimings = document.getElementById("availableTimings").textContent;/* Fetch the doctor's available timings from the server */;
+                if (!isTimeWithinAvailableTimings(hours, minutes,dayOfWeek, availableTimings)) {
+                alert("Selected appointment time is not within the doctor's available timings.");
+                return false; // Prevent form submission
+            }
+
+            return true; // Allow form submission
+        }
+
+        function isTimeWithinAvailableTimings(hours, minutes, selectedDay, availableTimings) {
+            // Split the available timings by day and time range
+            var timings = availableTimings.split(' ');
+
+            // Get the days of the week from the available timings
+            var daysOfWeek = timings[0].split('-');
+            var startDayOfWeek = getDayOfWeekNumber(daysOfWeek[0]);
+            var endDayOfWeek = getDayOfWeekNumber(daysOfWeek[1]);
+
+            // Get the start and end times from the available timings
+            var startTime = timings[1];
+            var endTime = timings[3];
+
+            // Extract the start and end hours and minutes
+            var startHours = parseInt(startTime.split(':')[0]);
+            var startMinutes = parseInt(startTime.split(':')[1]);
+            var endHours = parseInt(endTime.split(':')[0]);
+            var endMinutes = parseInt(endTime.split(':')[1]);
+
+            // Get the current day of the week (0 = Sunday, 1 = Monday, ...)
+            var currentDayOfWeek = selectedDay;
+
+            // Check if the current day of the week is within the available days
+            if (currentDayOfWeek < startDayOfWeek || currentDayOfWeek > endDayOfWeek) {
+                return false;
+            }
+
+            // Check if the selected appointment time is within the available timings
+            if (hours < startHours || hours > endHours) {
+                return false;
+            } else if (hours === startHours && minutes < startMinutes) {
+                return false;
+            } else if (hours === endHours && minutes > endMinutes) {
+                return false;
+            }
+
+            return true;
+        }
+
+        function getDayOfWeekNumber(dayOfWeek) {
+            switch (dayOfWeek.toLowerCase()) {
+                case 'sunday':
+                    return 0;
+                case 'monday':
+                    return 1;
+                case 'tuesday':
+                    return 2;
+                case 'wednesday':
+                    return 3;
+                case 'thursday':
+                    return 4;
+                case 'friday':
+                    return 5;
+                case 'saturday':
+                    return 6;
+                default:
+                    return -1; // Invalid day of the week
+            }
+        }
+
+
+    </script>
                 </div>
             </main>
     </div>

@@ -3,6 +3,9 @@ package com.isep.appointement.controller;
 import com.isep.appointement.controller.doctor.DoctorService;
 import com.isep.appointement.controller.patient.PatientService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +22,7 @@ public class homeController {
 
     @GetMapping("/")
     public String mainPage() {
-        return "首页";
+        return "redirect:/home";
     }
 
     @GetMapping("/home")
@@ -30,17 +33,39 @@ public class homeController {
     @GetMapping("/personal")
     public String personalPage(Principal principal) {
         String loggedInUserRole = "";
-        if(doctorService.getDoctorByEmail(principal.getName()) != null){
-            loggedInUserRole = "Doctor";
-        }
-        else if(patientService.getPatientByEmail(principal.getName()) != null){
-            loggedInUserRole = "Patient";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                String role = authority.getAuthority();
+                // Use the role as needed
+                loggedInUserRole = role;
+            }
         }
         if (loggedInUserRole.equals("Doctor")) {
             return "redirect:/info/doctor";
         }
         else {
             return "redirect:/info/patient";
+        }
+    }
+    @GetMapping("/reservation")
+    public String reservation(Principal principal) {
+        String loggedInUserRole = "";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                String role = authority.getAuthority();
+                // Use the role as needed
+                loggedInUserRole = role;
+            }
+        }
+        if (loggedInUserRole.equals("Doctor")) {
+            return "redirect:/appointment/doctor";
+        }
+        else {
+            return "redirect:/appointment/patient/search";
         }
     }
 
