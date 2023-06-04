@@ -109,6 +109,11 @@ public class Patient implements UserDetails {
         this.locked = true;
     }
 
+    public Patient(String username, String password) {
+        this.mail = username;
+        this.password = password;
+    }
+
 
     public Long getId() {
         return id;

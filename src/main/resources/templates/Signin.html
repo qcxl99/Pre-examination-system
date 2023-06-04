@@ -22,7 +22,7 @@
             <a th:href="@{/login}" sec:authorize="!isAuthenticated()">Personal Page</a></li>
         <li><a href="/announcement">Announcement</a></li>
         <li><a href="/science">Science</a></li>
-        <li><a href="/appointment/patient/search"th:href="@{/reservation}" sec:authorize="isAuthenticated()">Reservation</a>
+        <li><a href="/appointment/patient/search" th:href="@{/reservation}" sec:authorize="isAuthenticated()">Reservation</a>
             <a th:href="@{/login}" sec:authorize="!isAuthenticated()">Reservation</a>
 		<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
 	</ul>
@@ -42,7 +42,6 @@
                 <div th:if = "${param.logout}">
                     <div class="alert alert-info">You've been logged out </div>
                 </div>
-                <input type="hidden" id="autype" name="autype" value="patient">
                 <label for="email">Email:</label>
                 <input type="email" id="username" name="username" required>
 
@@ -51,14 +50,23 @@
 
                 <button type="submit">Login</button>
 
-            </form>
+
+
             <div class="form-group">
                 <span>
                     Not sign up?
                     <a href="/" th:href="@{/register}"> Sign up</a>
-
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </span>
+                <span >You are
+                    <select id="autype" name="autype" required>
+                    <option value="patient">patient</option>
+                    <option value="doctor">doctor</option>
+                </select>
+               </span>
+
             </div>
+            </form>
         </div>
     </div>
 

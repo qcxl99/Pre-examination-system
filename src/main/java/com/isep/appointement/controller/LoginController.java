@@ -4,6 +4,7 @@ import com.isep.appointement.controller.doctor.DoctorService;
 import com.isep.appointement.controller.patient.PatientService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -19,13 +20,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
-public class LoginController {
+public class LoginController implements ErrorController {
 /*    @GetMapping("/login")
     public String login() {
         return "login";
@@ -34,12 +36,21 @@ public class LoginController {
     private PatientService patientService;
     private DoctorService doctorService;
 
+
     @GetMapping("/login")
     public String login() {
         return "Signin";
     }
 
+    public String getErrorPath() {
+        return "/error";
+    }
 
+    @RequestMapping("/error")
+    public String handleError() {
+
+        return "redirect:/home";
+    }
 
 
 }

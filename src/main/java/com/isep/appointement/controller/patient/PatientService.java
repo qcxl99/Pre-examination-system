@@ -136,11 +136,9 @@ public class PatientService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Patient patient = patientRepository.findPatientsByMail(username).get();
         if(patient ==null){
-            LoginErrorMsg = "This email doesn't exist";
             throw new UsernameNotFoundException("Invalid email or password");
         }
         else if(!patient.isEnabled()){
-            LoginErrorMsg = "This email hasn't activated";
             throw new UsernameNotFoundException("This email hasn't activated");
         }
 

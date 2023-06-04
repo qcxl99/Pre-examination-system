@@ -2,6 +2,7 @@ package com.isep.appointement.controller.Security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isep.appointement.controller.doctor.DoctorService;
+import com.isep.appointement.controller.patient.CustomPatientDetails;
 import com.isep.appointement.controller.patient.PatientService;
 import com.isep.appointement.model.Doctor;
 import com.isep.appointement.model.Patient;
@@ -68,7 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
     @Bean
-    public AuthenticationProvider daoAuthenticationProvider(){
+    public AuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider dauth = new DaoAuthenticationProvider();
         dauth.setUserDetailsService(patientService);
         dauth.setPasswordEncoder(passwordEncoder());
@@ -76,7 +77,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthenticationProvider doctorDaoAuthenticationProvider(){
+    public AuthenticationProvider doctorDaoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(doctorService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -97,8 +98,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .addFilterAt(dynamicAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/register**", "/static/**", "/static/assets**", "/static/assets/**", "/css/**", "/js/**", "/img/**", "/home**","/science","/announcement","/aboutus","/contact us", "/register/**").permitAll()
-                .antMatchers("/patient**", "/patient/**","/doctor**","/doctor/**").hasAuthority("ADMIN")
+                .antMatchers("/register**", "/static/**", "/static/assets**", "/static/assets/**", "/css/**", "/js/**", "/img/**", "/home**", "/science", "/announcement", "/aboutus", "/contact us", "/register/**", "/login**", "/login/doctor**", "/").permitAll()
+                .antMatchers("/patient**", "/patient/**", "/doctor**", "/doctor/**").hasAuthority(Roles.ADMIN.name())
                 .antMatchers("/info/doctor**", "/info/doctor/**", "/appointment/doctor**", "/appointment/doctor/**").hasAnyAuthority("Doctor", "ADMIN")
                 .antMatchers("/info/patient**", "/info/patient/**", "/appointment/patient**", "/appointment/patient/**").hasAnyAuthority("Patient", "ADMIN")
                 .anyRequest().authenticated()
@@ -107,16 +108,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler(new RestAccessDeniedHandler())
-                .authenticationEntryPoint(authEntryPoint)
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/home")
-                .permitAll()
-                .and()
-                .formLogin()
-                .loginPage("/login/doctor")
-                .defaultSuccessUrl("/info/doctor")
+                .successForwardUrl("/home")
                 .permitAll()
                 .and()
                 .logout()
@@ -127,18 +122,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll();
     }
 
-@Bean
-public DynamicAuthenticationFilter dynamicAuthenticationFilter() throws Exception {
-    DynamicAuthenticationFilter filter = new DynamicAuthenticationFilter(new AntPathRequestMatcher("/login", "POST"));
-    filter.setAuthenticationManager(authenticationManagerBean());
-    return filter;
-}
+    @Bean
+    public DynamicAuthenticationFilter dynamicAuthenticationFilter() throws Exception {
+        DynamicAuthenticationFilter filter = new DynamicAuthenticationFilter(new AntPathRequestMatcher("/login**", "POST"));
+        filter.setAuthenticationManager(authenticationManagerBean());
+        return filter;
+    }
 
     public class DynamicAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
         public DynamicAuthenticationFilter(RequestMatcher requiresAuthenticationRequestMatcher) {
             super(requiresAuthenticationRequestMatcher);
         }
+
 
         @Override
         public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -156,18 +152,26 @@ public DynamicAuthenticationFilter dynamicAuthenticationFilter() throws Exceptio
 
             return authentication;
         }
+
+        @PostMapping(value = "/login-handler", produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<RestResponse> loginWithExceptionHandler() {
+            try {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                // Authentication success
+                return ResponseEntity.ok(new RestResponse("Success"));
+            } catch (AuthenticationException ex) {
+                // Authentication failure
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RestResponse("Authentication failed"));
+            }
+        }
     }
-    @PostMapping(value = "/login-handler", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RestResponse> loginWithExceptionHandler() {
-        return ResponseEntity.ok(new RestResponse("Success"));
-    }
 
+        @Bean
+        public PasswordEncoder passwordEncoder() {
 
-    @Bean
-    public PasswordEncoder passwordEncoder(){
+            return new BCryptPasswordEncoder();
 
-        return new BCryptPasswordEncoder();
+        }
 
-    }
 
 }

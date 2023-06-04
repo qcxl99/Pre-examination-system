@@ -101,6 +101,12 @@ public class Doctor implements UserDetails {
         this.specialty = specialty;
         this.deptName = deptName;
     }
+
+    public Doctor(String username, String password) {
+        this.mail = username;
+        this.password = password;
+    }
+
     public Long getIdDoc() {
         return idDoc;
     }

@@ -1,15 +1,10 @@
 package com.isep.appointement.model;
 
-import com.isep.appointement.Repository.AppointmentRepository;
-import com.isep.appointement.controller.AppointmentService;
-import com.isep.appointement.controller.Registration.RegistrationService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Setter

@@ -28,7 +28,7 @@ public class homeController {
     @GetMapping("/home")
     public String index(Principal principal) {
 
-        return "首页";
+        return "home";
     }
     @GetMapping("/personal")
     public String personalPage(Principal principal) {
@@ -71,17 +71,17 @@ public class homeController {
 
     @GetMapping("/ourDoctor")
     public String doctor() {
-        return "医生";
+        return "ourDoctor";
     }
 
     @GetMapping("/announcement")
     public String announcement() {
-        return "公告";
+        return "announcement";
     }
 
     @GetMapping("/science")
     public String science() {
-        return "科普";
+        return "science";
     }
 
     @GetMapping("/pretriage")
