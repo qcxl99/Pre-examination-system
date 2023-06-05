@@ -1,5 +1,6 @@
 package com.isep.appointement.model;
 
+import com.isep.appointement.controller.Reservation.AppointmentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

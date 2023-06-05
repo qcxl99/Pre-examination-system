@@ -21,7 +21,7 @@ public class homeController {
     private final PatientService patientService;
 
     @GetMapping("/")
-    public String mainPage() {
+    public String mainPage(Principal principal) {
         return "redirect:/home";
     }
 

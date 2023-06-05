@@ -1,8 +1,7 @@
 import com.isep.appointement.Repository.DoctorRepository;
-import com.isep.appointement.controller.AppointmentController;
+import com.isep.appointement.controller.Reservation.AppointmentController;
 import com.isep.appointement.controller.doctor.DoctorService;
 import com.isep.appointement.controller.patient.PatientService;
-import com.isep.appointement.model.AppointmentStatus;
 import com.isep.appointement.model.Reservation;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,7 +17,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @WebMvcTest(AppointmentController.class)
 public class AppointmentControllerTest {

@@ -1,4 +1,4 @@
-package com.isep.appointement.model;
+package com.isep.appointement.controller.Reservation;
 
 
 public enum AppointmentStatus {

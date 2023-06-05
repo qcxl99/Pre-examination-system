@@ -1,8 +1,6 @@
-package com.isep.appointement.controller;
+package com.isep.appointement.controller.Reservation;
 
 import com.isep.appointement.Repository.AppointmentRepository;
-import com.isep.appointement.Repository.PatientRepository;
-import com.isep.appointement.model.AppointmentStatus;
 import com.isep.appointement.model.Doctor;
 import com.isep.appointement.model.Patient;
 import com.isep.appointement.model.Reservation;
@@ -10,11 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.Iterator;
 import java.util.List;
 
 @Service

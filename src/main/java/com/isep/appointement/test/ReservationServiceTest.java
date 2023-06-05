@@ -2,9 +2,9 @@ package com.isep.appointement.test;
 
 import com.isep.appointement.Repository.AppointmentRepository;
 import com.isep.appointement.Repository.PatientRepository;
-import com.isep.appointement.controller.AppointmentService;
+import com.isep.appointement.controller.Reservation.AppointmentService;
 import com.isep.appointement.controller.patient.PatientService;
-import com.isep.appointement.model.AppointmentStatus;
+import com.isep.appointement.controller.Reservation.AppointmentStatus;
 import com.isep.appointement.model.Patient;
 import com.isep.appointement.model.Reservation;
 import org.junit.jupiter.api.Assertions;

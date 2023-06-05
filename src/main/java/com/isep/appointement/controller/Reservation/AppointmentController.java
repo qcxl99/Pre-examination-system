@@ -1,16 +1,14 @@
-package com.isep.appointement.controller;
+package com.isep.appointement.controller.Reservation;
 
 import com.isep.appointement.Repository.DoctorRepository;
 import com.isep.appointement.controller.doctor.DoctorService;
 import com.isep.appointement.controller.patient.PatientService;
 import com.isep.appointement.model.*;
 import lombok.AllArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.Doc;
 import java.security.Principal;
 
 @Controller
