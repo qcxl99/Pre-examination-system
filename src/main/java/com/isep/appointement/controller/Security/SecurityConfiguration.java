@@ -30,8 +30,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,6 +54,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 
 @Configuration
@@ -150,9 +154,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     new UsernamePasswordAuthenticationToken(request.getParameter("username"), request.getParameter("password"))
             );
 
+            return grantAdminAuthority(authentication);
+        }
+        // Set authority based on user role
+        public Authentication grantAdminAuthority(Authentication authentication) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Patient patient = patientService.getPatientByEmail(((UserDetails) authentication.getPrincipal()).getUsername());
+            if(patient != null && patient.getRole() == Roles.ADMIN){
+
+                // Add admin role to the user's roles
+                Collection<GrantedAuthority> authorities = new ArrayList<>(userDetails.getAuthorities());
+                authorities.add(new SimpleGrantedAuthority(Roles.ADMIN.name()));
+                UserDetails updatedUserDetails = new User(userDetails.getUsername(), userDetails.getPassword(), authorities);
+                Authentication updatedAuthentication = new UsernamePasswordAuthenticationToken(updatedUserDetails, authentication.getCredentials(), authorities);
+                return  updatedAuthentication;
+            }
             return authentication;
         }
-
         @PostMapping(value = "/login-handler", produces = MediaType.APPLICATION_JSON_VALUE)
         public ResponseEntity<RestResponse> loginWithExceptionHandler() {
             try {

@@ -27,7 +27,7 @@ public class DoctorServiceTest {
 
         Mockito.when(doctorRepository.save(doctor)).thenReturn(doctor);
 
-        Optional<Doctor> createdDoctor = Optional.ofNullable(doctorService.addDoctor(doctor));
+        Optional<Doctor> createdDoctor = Optional.of(doctorService.addDoctor(doctor));
 
         Assertions.assertTrue(createdDoctor.isPresent());
         Assertions.assertEquals(doctor, createdDoctor.get());
@@ -39,9 +39,9 @@ public class DoctorServiceTest {
 
         Mockito.when(doctorRepository.save(doctor)).thenReturn(null);
 
-        Optional<Doctor> createdDoctor = Optional.ofNullable(doctorService.addDoctor(doctor));
+        doctor = doctorService.addDoctor(doctor);
 
-        Assertions.assertFalse(createdDoctor.isPresent());
+        Assertions.assertFalse(doctor != null);
     }
 
 

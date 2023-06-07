@@ -1,3 +1,5 @@
+package com.isep.appointement.test;
+
 import com.isep.appointement.Repository.DoctorRepository;
 import com.isep.appointement.Repository.PatientRepository;
 import com.isep.appointement.controller.doctor.DoctorService;
