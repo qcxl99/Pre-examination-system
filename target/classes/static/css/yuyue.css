@@ -1,0 +1,207 @@
+body {
+    background-color: #f7f7f7;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+h1 {
+    font-size: 24px;
+    margin-top: 0;
+    text-align: center;
+}
+
+h2 {
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+#doctor-list,
+#place-list,
+#time-list {
+    margin-top: 10px;
+}
+
+details {
+    margin-bottom: 10px;
+}
+
+summary {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button {
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 20px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+img {
+    max-width: 210px;
+    max-height: 180px;
+}
+
+.doctor-profile {
+    display: flex;
+    align-items: center;
+}
+
+.doctor-profile img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.left-section {
+    flex: 0 0 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.right-section {
+    flex: 1;
+}
+
+h1, h2, h3, p {
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.appointment-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+.appointment-button:hover {
+    background-color: #0056b3;
+}
+.form-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.form-data h2 {
+    margin-bottom: 20px;
+}
+
+.form-data table {
+    border-collapse: collapse;
+    width: 60%;
+}
+
+.form-data th, .form-data td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.form-data th {
+    background-color: #f2f2f2;
+}
+
+.form-image {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.form-image img {
+    max-width: 400px;
+    max-height: 400px;
+}
+
+.appointment-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+.appointment-button:hover {
+    background-color: #0056b3;
+}
+img2html {
+    max-width: 210px;
+    max-height: 140px;
+}
+
+.form-table {
+    margin: 0 auto; /* 将表格居中 */
+    width: 80%; /* 设置表格宽度 */
+    border-collapse: collapse; /* 合并单元格边框 */
+}
+
+.form-table th, .form-table td {
+    padding: 10px; /* 设置单元格内边距 */
+    text-align: center; /* 居中对齐内容 */
+    border: 1px solid #ddd; /* 单元格边框样式 */
+}
+
+.form-table th {
+    background-color: #f2f2f2; /* 设置表头背景颜色 */
+}
+
+.form-table img {
+    max-width: 100px; /* 设置图片最大宽度 */
+    max-height: 100px; /* 设置图片最大高度 */
+}
