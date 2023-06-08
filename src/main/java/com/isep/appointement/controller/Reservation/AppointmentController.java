@@ -50,10 +50,15 @@ public class AppointmentController {
         return "edit_appointment";
     }
     @PostMapping("/appointment/{id}")
-    public String UpdateAppointment(@PathVariable Long id, @ModelAttribute("reservation") Reservation reservation, Model model){
+    public String UpdateAppointment(@PathVariable Long id,
+                                    @RequestParam(required = false) Long idPat,
+                                    @RequestParam(required = false) Long idDoc,
+                                    @ModelAttribute("reservation") Reservation reservation, Model model){
         Reservation existingReservation = appointmentService.findAppointmentById(id);
-       existingReservation.setDoctorName(reservation.getDoctorName());
-       existingReservation.setPatientName(reservation.getPatientName());
+        existingReservation.setDoctor(doctorService.getDoctorById(idDoc));
+        existingReservation.setPatient(patientService.getPatientById(idPat));
+       existingReservation.setDoctorName(existingReservation.getDoctor().getName());
+       existingReservation.setPatientName(existingReservation.getPatient().getName());
        existingReservation.setAppointmentTime(reservation.getAppointmentTime());
        existingReservation.setLocation(reservation.getLocation());
        existingReservation.setStatus(reservation.getStatus());

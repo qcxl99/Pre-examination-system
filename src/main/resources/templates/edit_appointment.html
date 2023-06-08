@@ -88,22 +88,24 @@
         <form th:action="@{/appointment/{id}(id=${reservation.id})}" th:object="${reservation}" method="post">
 
           <div class="form-group">
-            <label>doctor Name:</label>
+            <label>doctor ID:</label>
             <input
                     type="text"
-                    name="doctorName"
-                    th:field = "*{doctorName}"
+                    id="idDoc"
+                    name="idDoc"
+                    th:text = "*{doctor.idDoc}"
                     class="form-control"
                     placeholder="Enter new doctor"/>
 
           </div>
 
           <div class="form-group">
-            <label>patient Name:</label>
+            <label>patient ID:</label>
             <input
                     type="text"
-                    name="patientName"
-                    th:field = "*{patientName}"
+                    id="idPat"
+                    name="idPat"
+                    th:text = "*{patient.id}"
                     class="form-control"
                     placeholder="Enter new patient"
                     />
