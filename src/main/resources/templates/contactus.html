@@ -9,10 +9,11 @@
     <h1>contact us</h1>
     <nav>
         <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">products</a></li>
-            <li><a href="#">services</a></li>
-            <li><a href="#">About us</a></li>
+            <li><a href="/home">Home</a></li>
+            <li><a th:href="@{/personal}" sec:authorize="isAuthenticated()">Personal Page</a>
+                <a th:href="@{/login}" sec:authorize="!isAuthenticated()">Personal Page</a></li>
+            <li><a href="/apppointment/patient/search">Reservation</a></li>
+            <li><a href="/aboutus">About us</a></li>
         </ul>
     </nav>
 </header>

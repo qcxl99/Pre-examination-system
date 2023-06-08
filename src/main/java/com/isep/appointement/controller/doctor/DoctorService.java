@@ -1,10 +1,9 @@
 package com.isep.appointement.controller.doctor;
 
 import com.isep.appointement.Repository.DoctorRepository;
-import com.isep.appointement.Repository.PatientRepository;
-import com.isep.appointement.model.*;
-import com.isep.appointement.controller.ConfirmToken.ConfirmationTokenService;
-import com.isep.appointement.controller.email.EmailSender;
+import com.isep.appointement.model.Doctor;
+import com.isep.appointement.model.Hospital;
+import com.isep.appointement.model.Roles;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,48 +34,52 @@ public class DoctorService implements UserDetailsService {
             return doctorRepository.findAll(PageRequest.of(page, size));
         }
     }
-  public Doctor getDoctorById(Long id) {
 
-        return doctorRepository.findById(id).get();
+    public Doctor getDoctorById(Long id) {
+        return doctorRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Doctor with ID " + id + " does not exist."));
     }
+
     public Doctor getDoctorByEmail(String email) {
-        Optional<Doctor> patientsByEmail =  doctorRepository.findByMail(email);
-        if(!patientsByEmail.isPresent()){
-            throw new IllegalStateException("doctor email does not exist ");
+        return doctorRepository.findByMail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Doctor with email " + email + " does not exist."));
+    }
+
+    public Hospital getHospitalOfDoc(Doctor doctor) {
+        return doctorRepository.findHosOfDoc(doctor.getIdDoc())
+                .orElseThrow(() -> new IllegalArgumentException("Hospital for Doctor with ID " + doctor.getIdDoc() + " does not exist."));
+    }
+
+    public Doctor addDoctor(Doctor doctor) {
+        LocalDate birthdate = doctor.getBirthday();
+        if (birthdate == null) {
+            birthdate = LocalDate.now();
         }
-        return doctorRepository.findByMail(email).get();
-    }
-    public Hospital getHospitalOfDoc(Doctor doctor){
-        return doctorRepository.findHosOfDoc(doctor.getIdDoc()).get();
+        int age = Period.between(birthdate, LocalDate.now()).getYears();
+        doctor.setAge(age);
+        doctor.setPassword(new BCryptPasswordEncoder().encode(doctor.getPassword()));
+        doctor.setRole(Roles.Doctor);
+
+        return doctorRepository.save(doctor);
     }
 
-  public Doctor addDoctor(Doctor doctor) {
-      LocalDate birthdate = doctor.getBirthday();
-      if(birthdate == null){
-          birthdate = LocalDate.now();
-      }
-      int age = Period.between(birthdate,LocalDate.now()).getYears();
-      doctor.setAge(age);
-      doctor.setPassword(new BCryptPasswordEncoder().encode(doctor.getPassword()));
-      doctor.setRole(Roles.Doctor);
-
-      return doctorRepository.save(doctor);
-  }
     public void editDoctor(Doctor doctor) {
         doctorRepository.save(doctor);
     }
+
     public void deleteDoctor(Long id) {
         doctorRepository.deleteById(id);
     }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Doctor doctor = doctorRepository.findByMail(username).get();
-        if(doctor ==null){
-            throw new UsernameNotFoundException("Invalid email or password");
-        }
+        Doctor doctor = doctorRepository.findByMail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password"));
 
-        return new org.springframework.security.core.userdetails.User(doctor.getMail(),
-                doctor.getPassword(), doctor.getAuthorities());
-
+        return new org.springframework.security.core.userdetails.User(
+                doctor.getMail(),
+                doctor.getPassword(),
+                doctor.getAuthorities()
+        );
     }
 }

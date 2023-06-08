@@ -4,93 +4,108 @@ import com.isep.appointement.model.Doctor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @Controller
 public class DoctorController {
 
-    private DoctorService doctorService;
+    private final DoctorService doctorService;
 
     public DoctorController(DoctorService doctorService) {
         this.doctorService = doctorService;
     }
-    @GetMapping("/login/doctor")
-    public String showDoctorLoginPage() {
-        return "Signin_doctor";
-    }
+
 
     @GetMapping("/doctor")
-    public String showDoctor(@RequestParam(defaultValue = "0") int page,
-                             @RequestParam(defaultValue = "10") int size,
-                             @RequestParam(required = false) String keyword,Model model){
-
+    public String showDoctors(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String keyword,
+            Model model
+    ) {
         model.addAttribute("doctors", doctorService.getDoctorsByPageAndKeyword(page, size, keyword));
         return "doctor";
     }
+
     @GetMapping("/info/doctor")
     public String showDoctorInfo(Model model, Principal principal) {
         model.addAttribute("doctor", doctorService.getDoctorByEmail(principal.getName()));
         return "doctorInfo";
     }
-    @GetMapping("/doctor/new")
-    public String addDoctor(Model model){
 
+    @GetMapping("/doctor/new")
+    public String addDoctor(Model model) {
         model.addAttribute("doctor", new Doctor());
         return "addDoctor";
     }
-    @GetMapping("/doctor/edit/{id}")
-    public String editDoctor(@PathVariable Long id, Model model){
-        model.addAttribute("doctor", doctorService.getDoctorById(id));
 
+    @GetMapping("/doctor/edit/{id}")
+    public String editDoctor(@PathVariable Long id, Model model) {
+        model.addAttribute("doctor", doctorService.getDoctorById(id));
         return "edit_Doctor";
     }
+
     @PostMapping("/doctor")
-    public String saveDoctor(@ModelAttribute("doctor") Doctor doctor){
+    public String saveDoctor(@Valid @ModelAttribute("doctor") Doctor doctor, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "addDoctor";
+        }
         doctorService.addDoctor(doctor);
-
-        return "redirect:/doctor/new?success";
+        return "redirect:/doctors?success";
     }
+
     @PostMapping("/doctor/{id}")
-    public String UpdateAccount(@PathVariable Long id, @ModelAttribute("doctor") Doctor doctor, Model model){
+    public String updateAccount(
+            @PathVariable Long id,
+            @Valid @ModelAttribute("doctor") Doctor doctor,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            doctor.setIdDoc(id);
+            model.addAttribute("doctor", doctor);
+            return "edit_Doctor";
+        }
         Doctor existingDoctor = doctorService.getDoctorById(id);
-        existingDoctor.setIdDoc(id);
-        existingDoctor.setName(doctor.getName());
-        existingDoctor.setPassword(new BCryptPasswordEncoder().encode(doctor.getPassword()));
-        existingDoctor.setTelephone(doctor.getTelephone());
-        existingDoctor.setMail(doctor.getMail());
-        existingDoctor.setBirthday(doctor.getBirthday());
-        existingDoctor.setAge(doctor.getAge());
-        existingDoctor.setSex(doctor.getSex());
-        existingDoctor.setHospitalName(doctor.getHospitalName());
+        updateExistingDoctor(existingDoctor, doctor);
         doctorService.editDoctor(existingDoctor);
-        return "redirect:/doctor";
+        return "redirect:/doctors";
     }
+
     @PostMapping("/info/doctor/save")
-    public String UpdateInfo(@ModelAttribute("doctor") Doctor doctor, Model model, Principal principal){
+    public String updateInfo(
+            @Valid @ModelAttribute("doctor") Doctor doctor,
+            BindingResult bindingResult,
+            Model model,
+            Principal principal
+    ) {
+        if (bindingResult.hasErrors()) {
+            return "doctorInfo";
+        }
         Doctor existingDoctor = doctorService.getDoctorByEmail(principal.getName());
-        existingDoctor.setName(doctor.getName());
-        existingDoctor.setTelephone(doctor.getTelephone());
-        existingDoctor.setMail(doctor.getMail());
-        existingDoctor.setBirthday(doctor.getBirthday());
-        existingDoctor.setAge(doctor.getAge());
-        existingDoctor.setSex(doctor.getSex());
-        existingDoctor.setDeptName(doctor.getDeptName());
-        existingDoctor.setHospitalName(doctor.getHospitalName());
-        existingDoctor.setAvailableTimings(doctor.getAvailableTimings());
-        existingDoctor.setEducationBackground(doctor.getEducationBackground());
-        existingDoctor.setResume(doctor.getResume());
-        existingDoctor.setTitle(doctor.getTitle());
-        existingDoctor.setSpecialty(doctor.getSpecialty());
-
+        updateExistingDoctor(existingDoctor, doctor);
         doctorService.editDoctor(existingDoctor);
-        return "redirect:/info/doctor";
-    }
-    @GetMapping("/doctor/{id}")
-    public String RemoveDoctor(@PathVariable Long id){
-        doctorService.deleteDoctor(id);
-        return "redirect:/doctor";
+        return "redirect:/doctors/info";
     }
 
+    @GetMapping("/doctor/{id}")
+    public String removeDoctor(@PathVariable Long id) {
+        doctorService.deleteDoctor(id);
+        return "redirect:/doctors";
+    }
+
+    private void updateExistingDoctor(Doctor existingDoctor, Doctor newDoctor) {
+        existingDoctor.setName(newDoctor.getName());
+        existingDoctor.setPassword(new BCryptPasswordEncoder().encode(newDoctor.getPassword()));
+        existingDoctor.setTelephone(newDoctor.getTelephone());
+        existingDoctor.setMail(newDoctor.getMail());
+        existingDoctor.setBirthday(newDoctor.getBirthday());
+        existingDoctor.setAge(newDoctor.getAge());
+        existingDoctor.setSex(newDoctor.getSex());
+        existingDoctor.setHospitalName(newDoctor.getHospitalName());
+    }
 }

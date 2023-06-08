@@ -3,41 +3,38 @@ package com.isep.appointement.controller.Registration;
 import com.isep.appointement.controller.email.EmailValidator;
 import com.isep.appointement.controller.patient.PatientService;
 import com.isep.appointement.model.Patient;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+@AllArgsConstructor
 @Controller
 @RequestMapping(("/register"))
 public class RegistrationController {
 
-    private PatientService patientService;
-    private EmailValidator emailValidator;
-
-
-    public RegistrationController(PatientService patientService,EmailValidator emailValidator) {
-        this.patientService = patientService;
-        this.emailValidator = emailValidator;
-    }
-
+    private final PatientService patientService;
+    private final EmailValidator emailValidator;
 
     @PostMapping
-    public String RegisterPatient(@ModelAttribute("patient") Patient patient){
-        Boolean isValidMail = emailValidator.test(patient.getMail());
-        if(!isValidMail){throw new IllegalStateException("emial not valid");}
+    public String registerPatient(@ModelAttribute("patient") Patient patient) {
+        boolean isValidEmail = emailValidator.test(patient.getMail());
+        if (!isValidEmail) {
+            throw new IllegalStateException("Email is not valid");
+        }
         patientService.addPatient(patient);
-
         return "redirect:/register?success";
     }
-    @GetMapping(path = "confirm")
+
+    @GetMapping(path = "/confirm")
     public String confirm(@RequestParam("token") String token) {
         return patientService.confirmToken(token);
     }
+
     @GetMapping
-    public String addPatient(Model model){
+    public String showRegistrationForm(Model model) {
         model.addAttribute("patient", new Patient());
         return "Registration";
     }
-
 }

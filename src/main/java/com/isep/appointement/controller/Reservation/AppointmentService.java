@@ -16,9 +16,10 @@ import java.util.List;
 public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
 
-    public List<Reservation> getAllAppointment() {
+    public List<Reservation> getAllAppointments() {
         return appointmentRepository.findAll();
     }
+
     public Page<Reservation> getAppointmentsByPageAndKeyword(int page, int size, String keyword) {
         if (keyword != null && !keyword.isEmpty()) {
             return appointmentRepository.findByKeyword(keyword, PageRequest.of(page, size));
@@ -26,6 +27,7 @@ public class AppointmentService {
             return appointmentRepository.findAll(PageRequest.of(page, size));
         }
     }
+
     public Page<Reservation> getAppointmentsPatient(int page, int size, String keyword, Patient patient) {
         if (keyword != null && !keyword.isEmpty()) {
             return appointmentRepository.findByKeywordPatient(keyword, PageRequest.of(page, size), patient);
@@ -33,6 +35,7 @@ public class AppointmentService {
             return appointmentRepository.findByPatient(patient, PageRequest.of(page, size));
         }
     }
+
     public Page<Reservation> getAppointmentsDoctor(int page, int size, String keyword, Doctor doctor) {
         if (keyword != null && !keyword.isEmpty()) {
             return appointmentRepository.findByKeywordDoctor(keyword, PageRequest.of(page, size), doctor);
@@ -40,38 +43,43 @@ public class AppointmentService {
             return appointmentRepository.findByDoctor(doctor, PageRequest.of(page, size));
         }
     }
-    public Doctor findDoctorbyName(String name){
-       return appointmentRepository.findDocByName(name).get();
+
+    public Doctor findDoctorByName(String name) {
+        return appointmentRepository.findDocByName(name).orElse(null);
     }
-    public Patient findPatientbyName(String name){
-        Patient patient = appointmentRepository.findPatientsByName(name).get();
-        if(patient != null)
-        return patient;
-        else return null;
+
+    public Patient findPatientByName(String name) {
+        return appointmentRepository.findPatientsByName(name).orElse(null);
     }
-    public Reservation findAppointmentById(Long id){
-        return appointmentRepository.findById(id).orElseThrow(() ->
-                new IllegalStateException("appointment not found"));
+
+    public Reservation findAppointmentById(Long id) {
+        return appointmentRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Appointment not found"));
     }
-    public Page<Reservation> findByStatus(String status,int page, int size){
-        return appointmentRepository.findByStatus(status, PageRequest.of(page,size));
+
+    public Page<Reservation> findByStatus(String status, int page, int size) {
+        return appointmentRepository.findByStatus(status, PageRequest.of(page, size));
     }
 
     public Reservation addAppointment(Reservation reservation) {
-        reservation.setPatient(findPatientbyName(reservation.getPatientName()));
-        reservation.setDoctor(findDoctorbyName(reservation.getDoctorName()));
+        reservation.setPatient(findPatientByName(reservation.getPatientName()));
+        reservation.setDoctor(findDoctorByName(reservation.getDoctorName()));
         reservation.setStatus(AppointmentStatus.pending);
         return appointmentRepository.save(reservation);
     }
+
     public void editAppointment(Reservation reservation) {
         appointmentRepository.save(reservation);
     }
+
     public void deleteAppointment(Long id) {
         appointmentRepository.deleteById(id);
     }
+
     public int cancelAppointment(Long id) {
         return appointmentRepository.cancelAppointment(id);
     }
+
     public int acceptAppointment(Long id) {
         return appointmentRepository.enableAppointment(id);
     }

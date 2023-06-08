@@ -11,9 +11,9 @@ com\isep\appointement\test\PatientServiceTest.class
 com\isep\appointement\model\Roles.class
 com\isep\appointement\controller\doctor\DoctorController.class
 com\isep\appointement\controller\email\EmailService.class
+com\isep\appointement\controller\HomeController.class
 com\isep\appointement\Repository\DoctorRepository.class
 com\isep\appointement\controller\doctor\CustomDoctorDetails.class
-com\isep\appointement\controller\homeController.class
 com\isep\appointement\model\Patient.class
 com\isep\appointement\controller\patient\CustomPatientDetails.class
 com\isep\appointement\model\Doctor.class

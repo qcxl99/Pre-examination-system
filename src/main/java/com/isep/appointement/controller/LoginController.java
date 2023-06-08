@@ -28,14 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class LoginController implements ErrorController {
-/*    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }*/
-
-    private PatientService patientService;
-    private DoctorService doctorService;
-
 
     @GetMapping("/login")
     public String login() {

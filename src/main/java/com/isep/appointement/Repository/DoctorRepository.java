@@ -29,8 +29,5 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
     @Query("SELECT h FROM Hospital h where h.id = (SELECT d.hospital from Doctor d where d.idDoc = :id)")
     Optional<Hospital> findHosOfDoc(Long id);
-/*    @Modifying
-    @Query("UPDATE Doctor d " +
-            "SET d.enabled = TRUE, d.locked = true WHERE d.mail = ?1")
-    int enablePatient(String email);*/
+
 }

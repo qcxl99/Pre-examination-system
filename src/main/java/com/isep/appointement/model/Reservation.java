@@ -3,11 +3,15 @@ package com.isep.appointement.model;
 import com.isep.appointement.controller.Reservation.AppointmentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 @Entity
@@ -39,19 +43,15 @@ public class Reservation {
     @Column(nullable = false)
     private AppointmentStatus status;
 
-    public String getAppointmentTime() {
-/*        if(appointmentTime != null){
-            LocalDateTime localDateTime = LocalDateTime.parse(appointmentTime);
-            return localDateTime.getHour() + ":" + localDateTime.getMinute() + " - " + localDateTime.plusHours(1).getHour()+ " " + localDateTime.plusHours(1).getMinute();
-        }*/
+    public String getAppointmentTime(){
+        if(appointmentTime.contains("T")){
+            LocalDateTime dateTime = LocalDateTime.parse(appointmentTime);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String formattedDateTime = dateTime.format(formatter);
+            return formattedDateTime;
+        }
         return appointmentTime;
-    }
-
-    public void setAppointmentTime(String appointmentTime) {
-        this.appointmentTime = appointmentTime;
-    }
-
-    public Reservation() {
     }
 
 }

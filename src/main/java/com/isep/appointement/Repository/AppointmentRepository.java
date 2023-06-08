@@ -49,6 +49,7 @@ public interface AppointmentRepository extends JpaRepository<Reservation, Long> 
     @Query("UPDATE Reservation r " +
             "SET r.status = 'enabled' WHERE r.id = ?1")
     int enableAppointment(Long id);
+
     @Transactional
     @Modifying
     @Query("UPDATE Reservation r " +

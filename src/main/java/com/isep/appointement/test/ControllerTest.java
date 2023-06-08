@@ -1,6 +1,6 @@
 package com.isep.appointement.test;
 
-import com.isep.appointement.controller.homeController;
+import com.isep.appointement.controller.HomeController;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(homeController.class)
+@WebMvcTest(HomeController.class)
 public class ControllerTest {
 
     @Autowired

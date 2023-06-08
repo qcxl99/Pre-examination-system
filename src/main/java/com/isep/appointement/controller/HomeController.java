@@ -15,7 +15,7 @@ import java.security.Principal;
 
 @Controller
 @AllArgsConstructor
-public class homeController {
+public class HomeController {
 
     private final DoctorService doctorService;
     private final PatientService patientService;
@@ -27,22 +27,12 @@ public class homeController {
 
     @GetMapping("/home")
     public String index(Principal principal) {
-
         return "home";
     }
     @GetMapping("/personal")
     public String personalPage(Principal principal) {
-        String loggedInUserRole = "";
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication != null && authentication.isAuthenticated()) {
-            for (GrantedAuthority authority : authentication.getAuthorities()) {
-                String role = authority.getAuthority();
-                // Use the role as needed
-                loggedInUserRole = role;
-            }
-        }
-        if (loggedInUserRole.equals("Doctor")) {
+        String loggedInUserRole = getLoggedInUserRole();
+        if ("Doctor".equals(loggedInUserRole)) {
             return "redirect:/info/doctor";
         }
         else {
@@ -51,17 +41,9 @@ public class homeController {
     }
     @GetMapping("/reservation")
     public String reservation(Principal principal) {
-        String loggedInUserRole = "";
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loggedInUserRole = getLoggedInUserRole();
 
-        if (authentication != null && authentication.isAuthenticated()) {
-            for (GrantedAuthority authority : authentication.getAuthorities()) {
-                String role = authority.getAuthority();
-                // Use the role as needed
-                loggedInUserRole = role;
-            }
-        }
-        if (loggedInUserRole.equals("Doctor")) {
+        if ("Doctor".equals(loggedInUserRole)) {
             return "redirect:/appointment/doctor";
         }
         else {
@@ -85,28 +67,32 @@ public class homeController {
     }
 
     @GetMapping("/pretriage")
-    public String pretriage(){
+    public String pretriage() {
         return "Pre_Triage";
     }
 
     @GetMapping("/contactus")
-    public String contactus(){
+    public String contactus() {
         return "contactus";
     }
+
     @GetMapping("/aboutus")
-    public String aboutus(){
+    public String aboutus() {
         return "aboutus";
     }
 
-    @RequestMapping("/signup")
-    public String test(Model model){
-        model.addAttribute("msg", "hello, please Signup");
-        return "signup";
+    @GetMapping("/access-denied")
+    public String accessDenied() {
+        return "access-denied";
     }
 
-
-    @GetMapping("/access-denied")
-    public String accessDenied(){
-        return "access-denied";
+    private String getLoggedInUserRole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                return authority.getAuthority();
+            }
+        }
+        return "";
     }
 }

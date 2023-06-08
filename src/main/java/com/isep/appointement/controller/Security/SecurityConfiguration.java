@@ -102,10 +102,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .addFilterAt(dynamicAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/register**", "/static/**", "/static/assets**", "/static/assets/**", "/css/**", "/js/**", "/img/**", "/home**", "/science", "/announcement", "/aboutus", "/contact us", "/register/**", "/login**", "/login/doctor**", "/").permitAll()
-                .antMatchers("/patient**", "/patient/**", "/doctor**", "/doctor/**").hasAuthority(Roles.ADMIN.name())
-                .antMatchers("/info/doctor**", "/info/doctor/**", "/appointment/doctor**", "/appointment/doctor/**").hasAnyAuthority("Doctor", "ADMIN")
-                .antMatchers("/info/patient**", "/info/patient/**", "/appointment/patient**", "/appointment/patient/**").hasAnyAuthority("Patient", "ADMIN")
+                .antMatchers(
+                        "/register**", "/static/**", "/static/assets**", "/static/assets/**", "/css/**", "/js/**", "/img/**",
+                        "/home**", "/science", "/announcement", "/aboutus", "/contact us", "/register/**", "/login**",
+                        "/login/doctor**", "/"
+                ).permitAll()
+                .antMatchers("/patient**", "/patient/**", "/doctor**", "/doctor/**", "/appointment")
+                .hasAuthority(Roles.ADMIN.name())
+                .antMatchers("/info/doctor**", "/info/doctor/**", "/appointment/doctor**", "/appointment/doctor/**")
+                .hasAnyAuthority("Doctor", "ADMIN")
+                .antMatchers("/info/patient**", "/info/patient/**", "/appointment/patient**", "/appointment/patient/**")
+                .hasAnyAuthority("Patient", "ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
@@ -144,17 +151,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
             String autype = request.getParameter("autype");
             AuthenticationProvider authenticationProvider;
-            if (autype.equals("doctor")) {
+
+            if ("doctor".equals(autype)) {
                 authenticationProvider = doctorDaoAuthenticationProvider();
             } else {
                 authenticationProvider = daoAuthenticationProvider();
             }
-
             Authentication authentication = authenticationProvider.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getParameter("username"), request.getParameter("password"))
             );
+            if("patient".equalsIgnoreCase(autype)){
+                return grantAdminAuthority(authentication);
+            }
 
-            return grantAdminAuthority(authentication);
+            return authentication;
         }
         // Set authority based on user role
         public Authentication grantAdminAuthority(Authentication authentication) {

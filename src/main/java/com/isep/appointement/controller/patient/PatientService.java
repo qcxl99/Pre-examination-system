@@ -27,13 +27,13 @@ public class PatientService implements UserDetailsService {
 
     private final PatientRepository patientRepository;
     private final ConfirmationTokenService confirmationTokenService;
-    private EmailSender emailSender;
+    private final EmailSender emailSender;
     public static String LoginErrorMsg;
-
 
     public Page<Patient> getAllPatients(Pageable pageable) {
         return patientRepository.findAll(pageable);
     }
+
     public Page<Patient> getPatientsByPageAndKeyword(int page, int size, String keyword) {
         if (keyword != null && !keyword.isEmpty()) {
             return patientRepository.findByKeyword(keyword, PageRequest.of(page, size));
@@ -42,48 +42,37 @@ public class PatientService implements UserDetailsService {
         }
     }
 
-
-
     public Patient getPatientById(Long id) {
+        return patientRepository.findById(id).orElseThrow(() -> new IllegalStateException("Patient not found"));
+    }
 
-        return patientRepository.findById(id).get();
-    }
     public Patient getPatientByEmail(String email) {
-        Optional<Patient> patientsByEmail =  patientRepository.findPatientsByMail(email);
-        if(!patientsByEmail.isPresent()){
-            throw new IllegalStateException("patient email does not exist ");
-        }
-        else if(patientsByEmail.isPresent() && !patientsByEmail.get().getEnabled()){
-            throw new IllegalStateException("patient email does not actived ");
-        }
-        return patientRepository.findPatientsByMail(email).get();
+        return patientRepository.findPatientsByMail(email)
+                .filter(Patient::isEnabled)
+                .orElseThrow(() -> new IllegalStateException("Patient email not found or not activated"));
     }
+
     public Patient getPatientByPhone(String telephone) {
-        Optional<Patient> patientsByPhone =  patientRepository.findPatientsByPhone(telephone);
-        if(!patientsByPhone.isPresent()){
-            throw new IllegalStateException("patient phone number does not exist ");
-        }
-        return patientRepository.findPatientsByMail(telephone).get();
+        return patientRepository.findPatientsByPhone(telephone)
+                .orElseThrow(() -> new IllegalStateException("Patient phone number not found"));
     }
+
     public Patient getPatientByName(String name) {
-        Optional<Patient> patientsByName =  patientRepository.findPatientsByName(name);
-        if(!patientsByName.isPresent()){
-            throw new IllegalStateException("patient phone number does not exist ");
-        }
-        return patientRepository.findPatientsByName(name).get();
+        return patientRepository.findPatientsByName(name)
+                .orElseThrow(() -> new IllegalStateException("Patient name not found"));
     }
 
     public String addPatient(Patient patient) {
-        Optional<Patient> patientsByMail =  patientRepository.findPatientsByMail(patient.getMail());
-        if(patientsByMail.isPresent() && patientsByMail.get().getEnabled()){
-            throw new IllegalStateException("email existed ");
+        Optional<Patient> patientsByMail = patientRepository.findPatientsByMail(patient.getMail());
+        if (patientsByMail.isPresent() && patientsByMail.get().isEnabled()) {
+            throw new IllegalStateException("Email already exists");
         }
 
         LocalDate birthdate = patient.getBirthday();
-        if(birthdate == null){
+        if (birthdate == null) {
             birthdate = LocalDate.now();
         }
-        int age = Period.between(birthdate,LocalDate.now()).getYears();
+        int age = Period.between(birthdate, LocalDate.now()).getYears();
         patient.setAge(age);
         patient.setPassword(new BCryptPasswordEncoder().encode(patient.getPassword()));
         patientRepository.save(patient);
@@ -97,62 +86,57 @@ public class PatientService implements UserDetailsService {
         );
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        //TODO: send email;
         String link = "http://localhost:8080/register/confirm?token=" + token;
-        emailSender.send(
-                patient.getMail(),
-                buildEmail(patient.getName(), link));
+        emailSender.send(patient.getMail(), buildEmail(patient.getName(), link));
         return token;
     }
+
     @Transactional
     public String confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)
-                .orElseThrow(() ->
-                        new IllegalStateException("token not found"));
+                .orElseThrow(() -> new IllegalStateException("Token not found"));
 
         if (confirmationToken.getConfirmedAt() != null) {
-            throw new IllegalStateException("email already confirmed");
+            throw new IllegalStateException("Email already confirmed");
         }
 
         LocalDateTime expiredAt = confirmationToken.getExpiredAt();
 
         if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException("token expired");
+            throw new IllegalStateException("Token expired");
         }
 
         confirmationTokenService.setConfirmedAt(token);
         enableUser(confirmationToken.getPatient().getMail());
         return "redirect:/home";
     }
+
     public void editPatient(Patient patient) {
         patientRepository.save(patient);
     }
+
     public void deletePatient(Long id) {
         patientRepository.deleteById(id);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Patient patient = patientRepository.findPatientsByMail(username).get();
-        if(patient ==null){
-            throw new UsernameNotFoundException("Invalid email or password");
-        }
-        else if(!patient.isEnabled()){
-            throw new UsernameNotFoundException("This email hasn't activated");
-        }
+        Patient patient = patientRepository.findPatientsByMail(username)
+                .filter(Patient::isEnabled)
+                .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password"));
 
-        return new org.springframework.security.core.userdetails.User(patient.getMail(),
-                patient.getPassword(),patient.isEnabled(),patient.isAccountNonExpired(),
-                patient.isCredentialsNonExpired(),patient.isAccountNonLocked(),
-                patient.getAuthorities());
-
+        return new org.springframework.security.core.userdetails.User(
+                patient.getMail(),
+                patient.getPassword(),
+                patient.isEnabled(),
+                patient.isAccountNonExpired(),
+                patient.isCredentialsNonExpired(),
+                patient.isAccountNonLocked(),
+                patient.getAuthorities()
+        );
     }
 
-/*    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(){
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(Roles.Patient.name());
-        return Collections.singletonList(authority);
-    }*/
     public int enableUser(String email) {
         return patientRepository.enablePatient(email);
     }

@@ -13,96 +13,108 @@ import java.security.Principal;
 
 @Controller
 @AllArgsConstructor
+@RequestMapping("/appointment")
 public class AppointmentController {
+
     private final AppointmentService appointmentService;
     private final PatientService patientService;
-    private final DoctorRepository doctorRepository;
     private final DoctorService doctorService;
 
-    //admin
-    @GetMapping("/appointment")
-    public String showAllAppointmentbyKeyword(
+    // Admin
+    @GetMapping
+    public String showAllAppointmentsByKeyword(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String keywordApp,Model model){
-        model.addAttribute("reservations", appointmentService.getAppointmentsByPageAndKeyword(page,size,keywordApp));
+            @RequestParam(required = false) String keywordApp,
+            Model model) {
+        model.addAttribute("reservations", appointmentService.getAppointmentsByPageAndKeyword(page, size, keywordApp));
         return "Appointment";
     }
-    @GetMapping("/appointment/pending")
-    public String showPending(@RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "10") int size,Model model){
-        model.addAttribute("reservations", appointmentService.findByStatus(AppointmentStatus.pending.name(),page,size));
+
+    @GetMapping("/pending")
+    public String showPendingAppointments(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Model model) {
+        model.addAttribute("reservations", appointmentService.findByStatus(AppointmentStatus.pending.name(), page, size));
         return "Appointment";
     }
-    @GetMapping("/appointment/new")
-    public String addAppointment(Model model){
+
+    @GetMapping("/new")
+    public String addAppointment(Model model) {
         model.addAttribute("reservation", new Reservation());
         return "add_appointment";
     }
-    @PostMapping("/appointment")
-    public String saveAppointment(@ModelAttribute("reservation") Reservation reservation){
+
+    @PostMapping
+    public String saveAppointment(@ModelAttribute("reservation") Reservation reservation) {
         appointmentService.addAppointment(reservation);
         return "redirect:/appointment/new?success";
     }
-    @GetMapping("/appointment/edit/{id}")
-    public String editAppointment(@PathVariable Long id, Model model){
+
+    @GetMapping("/edit/{id}")
+    public String editAppointment(@PathVariable Long id, Model model) {
         model.addAttribute("reservation", appointmentService.findAppointmentById(id));
         return "edit_appointment";
     }
-    @PostMapping("/appointment/{id}")
-    public String UpdateAppointment(@PathVariable Long id,
+
+    @PostMapping("/{id}")
+    public String updateAppointment(@PathVariable Long id,
                                     @RequestParam(required = false) Long idPat,
                                     @RequestParam(required = false) Long idDoc,
-                                    @ModelAttribute("reservation") Reservation reservation, Model model){
+                                    @ModelAttribute("reservation") Reservation reservation, Model model) {
         Reservation existingReservation = appointmentService.findAppointmentById(id);
         existingReservation.setDoctor(doctorService.getDoctorById(idDoc));
         existingReservation.setPatient(patientService.getPatientById(idPat));
-       existingReservation.setDoctorName(existingReservation.getDoctor().getName());
-       existingReservation.setPatientName(existingReservation.getPatient().getName());
-       existingReservation.setAppointmentTime(reservation.getAppointmentTime());
-       existingReservation.setLocation(reservation.getLocation());
-       existingReservation.setStatus(reservation.getStatus());
+        existingReservation.setPatientName(existingReservation.getPatient().getName());
+        existingReservation.setDoctorName(existingReservation.getDoctor().getName());
+        existingReservation.setAppointmentTime(reservation.getAppointmentTime());
+        existingReservation.setLocation(reservation.getDoctor().getHospital().getAddress());
+        existingReservation.setStatus(reservation.getStatus());
         appointmentService.addAppointment(existingReservation);
         return "redirect:/appointment";
     }
-    @GetMapping("/appointment/{id}")
-    public String RemoveAppointment(@PathVariable Long id){
+
+    @GetMapping("/{id}")
+    public String removeAppointment(@PathVariable Long id) {
         appointmentService.deleteAppointment(id);
         return "redirect:/appointment";
     }
-    //patient
-    @GetMapping("/appointment/patient")
-    public String showAppointmentbyKeyword(
+
+    // Patient
+    @GetMapping("/patient")
+    public String showPatientAppointmentsByKeyword(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String keywordPat,Model model, Principal principal){
+            @RequestParam(required = false) String keywordPat,
+            Model model, Principal principal) {
         String email = principal.getName();
         Patient patient = patientService.getPatientByEmail(email);
-        model.addAttribute("reservations", appointmentService.getAppointmentsPatient(page,size,keywordPat,patient));
+        model.addAttribute("reservations", appointmentService.getAppointmentsPatient(page, size, keywordPat, patient));
         return "appointment_patient";
     }
-/*    @GetMapping("/appointment/patient/{name}")
-    public String showAppointment(@PathVariable String name, @ModelAttribute("patient") Patient patient, Model model){
-        patient = patientService.getPatientByName(name);
-        model.addAttribute("reservations", appointmentService.findByPatient(patient.getName()));
-        return "appointment_patient";
-    }*/
-@GetMapping("/appointment/patient/search")
-public String searchDoctor(@RequestParam(defaultValue = "0") int page,
-                           @RequestParam(defaultValue = "10") int size,
-                           @RequestParam(required = false) String keywordDoc,Model model){
 
-    model.addAttribute("doctors", doctorService.getDoctorsByPageAndKeyword(page, size, keywordDoc));
-    return "AppointmentSearch";
-}
-    @GetMapping("/appointment/patient/confirm/{idDoc}")
-    public String confirmAppointment(@PathVariable Long idDoc, Model model){
+    @GetMapping("patient/search")
+    public String searchDoctor(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String keywordDoc,
+            Model model) {
+        model.addAttribute("doctors", doctorService.getDoctorsByPageAndKeyword(page, size, keywordDoc));
+        return "AppointmentSearch";
+    }
+
+    @GetMapping("patient/confirm/{idDoc}")
+    public String confirmAppointment(@PathVariable Long idDoc, Model model) {
         model.addAttribute("reservation", new Reservation());
         model.addAttribute("doctor", doctorService.getDoctorById(idDoc));
         return "AppointmentConfirm";
     }
-    @PostMapping("/appointment/patient/new/{idDoc}")
-    public String saveAppointmentPatient(@PathVariable Long idDoc, @ModelAttribute("reservation") Reservation reservation, Principal principal){
+
+    @PostMapping("patient/new/{idDoc}")
+    public String saveAppointmentPatient(@PathVariable Long idDoc,
+                                         @ModelAttribute("reservation") Reservation reservation,
+                                         Principal principal) {
         Doctor doctor = doctorService.getDoctorById(idDoc);
         Patient patient = patientService.getPatientByEmail(principal.getName());
         reservation.setPatient(patient);
@@ -114,8 +126,11 @@ public String searchDoctor(@RequestParam(defaultValue = "0") int page,
         appointmentService.addAppointment(reservation);
         return "redirect:/appointment/patient";
     }
-    @PostMapping("/appointment/patient/{id}")
-    public String UpdateAppointmentPatient(@PathVariable Long id, @ModelAttribute("reservation") Reservation reservation, Model model){
+
+    @PostMapping("patient/{id}")
+    public String updateAppointmentPatient(@PathVariable Long id,
+                                           @ModelAttribute("reservation") Reservation reservation,
+                                           Model model) {
         Reservation existingReservation = appointmentService.findAppointmentById(id);
         existingReservation.setDoctorName(reservation.getDoctorName());
         existingReservation.setPatientName(reservation.getPatientName());
@@ -124,36 +139,42 @@ public String searchDoctor(@RequestParam(defaultValue = "0") int page,
         appointmentService.editAppointment(existingReservation);
         return "redirect:/appointment/patient";
     }
-    @GetMapping("/appointment/patient/edit/{id}")
-    public String editAppointmentPatient(@PathVariable Long id, Model model){
+
+    @GetMapping("patient/edit/{id}")
+    public String editAppointmentPatient(@PathVariable Long id, Model model) {
         model.addAttribute("reservation", appointmentService.findAppointmentById(id));
         return "edit_appointment_patient";
     }
-    @GetMapping("/appointment/patient/{id}")
-    public String CancelAppointmentPatient(@PathVariable Long id){
+
+    @GetMapping("/patient/{id}")
+    public String cancelAppointmentPatient(@PathVariable Long id) {
         appointmentService.cancelAppointment(id);
         return "redirect:/appointment/patient";
     }
-    //doctor
-    @GetMapping("/appointment/doctor")
-    public String showDoctorAppointment
-    (@RequestParam(defaultValue = "0") int page,
-     @RequestParam(defaultValue = "10") int size,
-     @RequestParam(required = false) String keywordDoc,Model model, Principal principal){
+
+    // Doctor
+    @GetMapping("/doctor")
+    public String showDoctorAppointments(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String keywordDoc,
+            Model model, Principal principal) {
         String email = principal.getName();
-        Doctor doctor = doctorRepository.findByMail(email).get();
-        model.addAttribute("reservations", appointmentService.getAppointmentsDoctor(page,size,keywordDoc, doctor));
+        Doctor doctor = doctorService.getDoctorByEmail(email);
+        model.addAttribute("reservations", appointmentService.getAppointmentsDoctor(page, size, keywordDoc, doctor));
         return "appointment_doctor";
     }
-    @GetMapping("/appointment/doctor/accept/{id}")
-    public String AcceptAppointment(@PathVariable Long id){
+
+    @GetMapping("/doctor/accept/{id}")
+    public String acceptAppointment(@PathVariable Long id) {
         appointmentService.acceptAppointment(id);
         return "redirect:/appointment/doctor";
     }
-    @GetMapping("/appointment/doctor/{id}")
-    public String CancelAppointment(@PathVariable Long id){
+
+    @GetMapping("/doctor/{id}")
+    public String cancelAppointment(@PathVariable Long id) {
         appointmentService.cancelAppointment(id);
         return "redirect:/appointment/doctor";
     }
-
 }
+
