@@ -1,8 +1,9 @@
+package com.isep.appointement.test;
+
 import com.isep.appointement.Repository.DoctorRepository;
 import com.isep.appointement.controller.AppointmentController;
 import com.isep.appointement.controller.doctor.DoctorService;
 import com.isep.appointement.controller.patient.PatientService;
-import com.isep.appointement.model.AppointmentStatus;
 import com.isep.appointement.model.Reservation;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,11 +15,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.ui.Model;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(AppointmentController.class)
 public class AppointmentControllerTest {
@@ -26,17 +26,6 @@ public class AppointmentControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private Reservation appointmentService;
-
-    @MockBean
-    private PatientService patientService;
-
-    @MockBean
-    private DoctorRepository doctorRepository;
-
-    @MockBean
-    private DoctorService doctorService;
     @InjectMocks
     private AppointmentController appointmentController;
 

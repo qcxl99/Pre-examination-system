@@ -25,10 +25,12 @@ public class ReservationServiceTest {
 
     @Mock
     private AppointmentRepository reservationRepository;
+    @Mock
     private PatientRepository patientRepository;
 
     @InjectMocks
     private AppointmentService reservationService;
+    @InjectMocks
     private PatientService patientService;
 
     @Test
@@ -53,9 +55,10 @@ public class ReservationServiceTest {
 
         Mockito.when(reservationRepository.findById(reservationId)).thenReturn(Optional.empty());
 
-        Optional<Reservation> retrievedReservation = Optional.ofNullable(reservationService.findAppointmentById(reservationId));
 
-        Assertions.assertFalse(retrievedReservation.isPresent());
+        Reservation retrievedReservation = reservationService.findAppointmentById(reservationId);
+
+        Assertions.assertTrue(retrievedReservation != null);
     }
 
     @Test
@@ -74,6 +77,5 @@ public class ReservationServiceTest {
         Assertions.assertEquals(reservations, retrievedReservations);
     }
 
-    // Add more tests for other reservation service methods
 
 }

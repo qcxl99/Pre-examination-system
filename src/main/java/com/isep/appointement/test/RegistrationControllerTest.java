@@ -46,5 +46,4 @@ public class RegistrationControllerTest {
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/register?success"));
     }
 
-    // Add tests for other methods in RegistrationController
 }

@@ -22,11 +22,11 @@ public class PatientServiceTest {
 
     @Test
     public void testCreatePatient_Success() {
-        Patient patient = new Patient();
+        Patient patient = new Patient("username@1", "password");
 
         Mockito.when(patientRepository.save(patient)).thenReturn(patient);
 
-        Optional<Patient> createdPatient = patientRepository.findPatientsByMail(patient.getMail());
+        Optional<Patient> createdPatient = patientRepository.findPatientsByMail("username@1");
 
         Assertions.assertTrue(createdPatient.isPresent());
         Assertions.assertEquals(patient, createdPatient.get());

@@ -11,6 +11,7 @@ com\isep\appointement\model\Roles.class
 com\isep\appointement\controller\AppointmentService.class
 com\isep\appointement\controller\doctor\DoctorController.class
 com\isep\appointement\controller\email\EmailService.class
+com\isep\appointement\test\AppointmentControllerTest.class
 com\isep\appointement\Repository\DoctorRepository.class
 com\isep\appointement\controller\doctor\CustomDoctorDetails.class
 com\isep\appointement\controller\homeController.class
@@ -36,7 +37,6 @@ com\isep\appointement\model\AppointmentStatus.class
 com\isep\appointement\controller\patient\PatientController.class
 com\isep\appointement\controller\AppointmentController.class
 com\isep\appointement\controller\email\EmailSender.class
-AppointmentControllerTest.class
 com\isep\appointement\model\Reservation.class
 com\isep\appointement\controller\Security\RestAccessDeniedHandler.class
 com\isep\appointement\controller\Security\DefaultExceptionHandler.class
