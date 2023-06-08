@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Xiehe Hospital</title>
+        <link rel="stylesheet" type="text/css" href="../static/newcss/styles.css">
+		<link rel="stylesheet" type="text/css" href="../static/assets/css/sce.css"/>
+        <script src="../static/newjs/load-header.js"></script>
+    <style>
+		.tem{background-image: url("../static/img/banner1.jpg");background-size: 100%;}
+		.ten{height:70px;}
+        .error-message {
+            color: #FFD700; /* your desired color, here is gold */
+        }
+	</style>
+    </head>
+    <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            // prevent form from submitting
+            event.preventDefault();
+
+            // check email
+            var email = document.getElementById('username').value;
+            if (!email.includes('@')) { // very basic validation
+                document.getElementById('emailError').style.display = 'block';
+            } else {
+                document.getElementById('emailError').style.display = 'none';
+            }
+
+            // check password
+            var password = document.getElementById('password').value;
+            if (password.length < 8) { // very basic validation
+                document.getElementById('passwordError').style.display = 'block';
+            } else {
+                document.getElementById('passwordError').style.display = 'none';
+            }
+
+            // if no errors, submit form
+            if (email.includes('@') && password.length >= 8) {
+                this.submit();
+            }
+        });
+    </script>
+<body class="tem">
+	<nav class="main-nav overlay clearfix ten">
+	<ul id="menu">
+        <li><a href="/home">Home</a></li>
+        <li><a th:href="@{/personal}" sec:authorize="isAuthenticated()">Personal Page</a>
+            <a th:href="@{/login}" sec:authorize="!isAuthenticated()">Personal Page</a></li>
+        <li><a href="/announcement">Announcement</a></li>
+        <li><a href="/science">Science</a></li>
+        <li><a href="/appointment/patient/search" th:href="@{/reservation}" sec:authorize="isAuthenticated()">Reservation</a>
+            <a th:href="@{/login}" sec:authorize="!isAuthenticated()">Reservation</a>
+		<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+	</ul>
+	</nav>
+    <div id="header-placeholder"></div>
+    <div class="background"></div>
+    <div class="main-container">
+        <div class="signup-container">
+            <div class="card-header"><h3 class="text-center font-weight-light my-4"></h3></div>
+            <form th:action="@{/login}" method="post">
+                <!--error message-->
+                <div th:if = "${param.error}" >
+                    <div class="alert alert-danger" >Invalid email or password</div>
+                </div>
+
+                <!--logout message-->
+                <div th:if = "${param.logout}">
+                    <div class="alert alert-info">You've been logged out </div>
+                </div>
+                <label for="username">Email:</label>
+                <input type="email" id="username"  name="username" required>
+                <span id="emailError" class="error-message" style="display:none">Please enter a valid email</span>
+                <label for="password">Password:</label>
+                <input type="password" id="password"  name="password" required>
+                <span id="passwordError" class="error-message" style="display:none">Please enter a valid password</span>
+                <button type="submit">Login</button>
+
+                <div class="form-group">
+                <span>
+                    Not sign up?
+                    <a href="/" th:href="@{/register}"> Sign up</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+                    <span >You are
+                    <label for="autype"></label><select id="autype" name="autype" required>
+                    <option value="patient">patient</option>
+                    <option value="doctor">doctor</option>
+                </select>
+               </span>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

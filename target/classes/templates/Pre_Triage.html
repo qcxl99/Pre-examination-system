@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Where are you feeling uncomfortable?</h1>
+<div class="select-container">
+    <select class="styled-select" id="discomfortLocation" onchange="displayQuestions()">
+        <option value="" disabled selected>select part</option>
+        <option value="head">Head</option>
+        <option value="abdomen">Abdomen</option>
+        <option value="chest">Chest</option>
+        <option value="leg">Leg</option>
+    </select>
+</div>
+
+<div id="headQuestions" class="hidden">
+    <h2>If you selected "Head", please answer the following questions:</h2>
+    <h3>Are your headaches accompanied by other symptoms:</h3>
+    <input type="radio" id="optionA1" name="headacheSymptoms" value="A">
+    <label for="optionA1">A. Fatigue, tension, insomnia, memory loss, emotional instability</label><br>
+    <input type="radio" id="optionB1" name="headacheSymptoms" value="B">
+    <label for="optionB1">B. Nausea and vomiting, weakness on one side of the limbs, unable to speak</label><br>
+    <input type="radio" id="optionC1" name="headacheSymptoms" value="C">
+    <label for="optionC1">C. Dizziness, tinnitus or blocked, purulent or bloody nose</label><br>
+    <input type="radio" id="optionD1" name="headacheSymptoms" value="D">
+    <label for="optionD1">D. High blood pressure or kidney disease, or headaches accompanied by fever</label><br>
+    <input type="radio" id="optionE1" name="headacheSymptoms" value="E">
+    <label for="optionE1">E. Sensitivity to light, blurred vision or pain around or over the eyes</label><br>
+    <input type="radio" id="optionF1" name="headacheSymptoms" value="F">
+    <label for="optionF1">F. Often closely associated with horizontal rotation of the head, with dizziness and numbness of the arms</label><br>
+    <input type="radio" id="optionG1" name="headacheSymptoms" value="G">
+    <label for="optionG1">G. Have you been traumatised and bled</label><br>
+    <button onclick="showSuggestion()">Submit</button>
+</div>
+
+<div id="abdomenQuestions" class="hidden">
+    <h2>If you selected “Abdomen”，please answer the following questions：</h2>
+    <h3>Is your abdominal pain accompanied by other symptoms:</h3>
+    <input type="radio" id="optionA2" name="abdomenSymptoms" value="A">
+    <label for="optionA2">A. Right upper and lower quadrant pain</label><br>
+    <input type="radio" id="optionB2" name="abdomenSymptoms" value="B">
+    <label for="optionB2">B. Mid-upper abdominal pain</label><br>
+    <input type="radio" id="optionC2" name="abdomenSymptoms" value="C">
+    <label for="optionC2">C. Pain in the left upper quadrant</label><br>
+    <input type="radio" id="optionD2" name="abdomenSymptoms" value="D">
+    <label for="optionD2">D. Pain in the middle and lower quadrant</label><br>
+    <input type="radio" id="optionE2" name="abdomenSymptoms" value="E">
+    <label for="optionE2">E. Pain throughout the abdominal cavity</label><br>
+    <input type="radio" id="optionF2" name="abdomenSymptoms" value="F">
+    <label for="optionF2">F. Pain is intense, even unbearable</label><br>
+    <button onclick="showSuggestion()">Submit</button>
+</div>
+
+<div id="chestQuestions" class="hidden">
+    <h2>If you selected “Chest”，please answer the following questions：</h2>
+    <h3>Is your chest pain accompanied by other symptoms:</h3>
+    <input type="radio" id="optionA3" name="chestSymptoms" value="A">
+    <label for="optionA3">A. . Accompanied by coughing, which worsens with deep inhalation or exhalation</label><br>
+    <input type="radio" id="optionB3" name="chestSymptoms" value="B">
+    <label for="optionB3">B. Sudden intense chest pain after exercise, accompanied by dyspnoea</label><br>
+    <input type="radio" id="optionC3" name="chestSymptoms" value="C">
+    <label for="optionC3">C. Sudden onset of tearing pain in the chest and back, accompanied by high blood pressure</label><br>
+    <input type="radio" id="optionD3" name="chestSymptoms" value="D">
+    <label for="optionD3">D. Chest or thoracic pain, feeling of pressure, accompanied by palpitations and shortness of breath</label><br>
+    <input type="radio" id="optionE3" name="chestSymptoms" value="E">
+    <label for="optionE3">E. As a result of trauma such as fractures, the pain is
+        aggravated when you bend over or lean to the side.</label><br>
+    <button onclick="showSuggestion()">Submit</button>
+</div>
+
+
+<div id="legQuestions" class="hidden">
+    <h2>If you selected “Leg”，please answer these following questions：</h2>
+    <h3>Is your leg pain accompanied by other symptoms:</h3>
+    <input type="radio" id="optionA5" name="legSymptoms" value="A">
+    <label for="optionA5">A. Pain on the outside of the lower limbs, extending to the buttocks or waist</label><br>
+    <input type="radio" id="optionB5" name="legSymptoms" value="B">
+    <label for="optionB5">B. Pain in the joints of the long and short legs after exercise</label><br>
+    <input type="radio" id="optionC5" name="legSymptoms" value="C">
+    <label for="optionC5">C. Red, swollen and painful ankle and toe joints with a sensation of heat, especially after eating seafood or beer.</label><br>
+    <input type="radio" id="optionD5" name="legSymptoms" value="D">
+    <label for="optionD5">D. After sitting for a long time, the calf is swollen and there is pain when pressing with the fingers. The pain can be
+        relieved by resting while walking.</label><br>
+    <input type="radio" id="optionE5" name="legSymptoms" value="E">
+    <label for="optionE5">E. Bilateral symmetrical pain in several joints such as the
+        knee joint or the small joints of the hand.</label><br>
+    <button onclick="showSuggestion()">Submit</button>
+</div>
+
+<div id="suggestion" class="hidden">
+    <div id="popup" class="popup">
+        <h2>I suggest you find：</h2>
+        <p id="department"></p>
+        <a href="/.."> <button onclick="returnToSelection()">Return</button></a>
+        <a href="/appointment/patient/search"> <button>New Reservation</button></a>
+    </div>
+</div>
+
+
+
+<script>
+    function displayQuestions() {
+        resetSuggestion();
+        const location = document.getElementById("discomfortLocation").value;
+        const headQuestions = document.getElementById("headQuestions");
+        const abdomenQuestions = document.getElementById("abdomenQuestions");
+        const chestQuestions = document.getElementById("chestQuestions");
+        const legQuestions = document.getElementById("legQuestions");
+
+        headQuestions.classList.add("hidden");
+        abdomenQuestions.classList.add("hidden");
+        chestQuestions.classList.add("hidden");
+        legQuestions.classList.add("hidden");
+
+        switch (location) {
+            case "head":
+                headQuestions.classList.remove("hidden");
+                headQuestions.classList.add("fade-in");
+                break;
+            case "abdomen":
+                abdomenQuestions.classList.remove("hidden");
+                abdomenQuestions.classList.add("fade-in");
+                break;
+            case "chest":
+                chestQuestions.classList.remove("hidden");
+                chestQuestions.classList.add("fade-in");
+                break;
+            case "leg":
+                legQuestions.classList.remove("hidden");
+                legQuestions.classList.add("fade-in");
+                break;
+        }
+    }
+
+
+
+    function showSuggestion() {
+        const headOption = document.querySelector('input[name="headacheSymptoms"]:checked');
+        const abdomenOption = document.querySelector('input[name="abdomenSymptoms"]:checked');
+        const chestOption = document.querySelector('input[name="chestSymptoms"]:checked');
+        const legOption = document.querySelector('input[name="legSymptoms"]:checked');
+        const popup = document.getElementById("popup");
+        const mainContent = document.querySelector("body > :not(#suggestion)");
+        const sectionsToHide = document.querySelectorAll("#headQuestions, #abdomenQuestions, #chestQuestions, #legQuestions");
+
+        let selectedOption = '';
+
+        if (headOption) {
+            selectedOption = headOption.value + '1';
+        } else if (abdomenOption) {
+            selectedOption = abdomenOption.value + '2';
+        } else if (chestOption) {
+            selectedOption = chestOption.value + '3';
+        } else if (legOption) {
+            selectedOption = legOption.value + '4';
+        }
+
+        const department = document.getElementById("department");
+        const suggestion = document.getElementById("suggestion");
+        let suggestedDepartment;
+
+        switch (selectedOption) {
+            case "A1":
+                suggestedDepartment = "Neurology";
+                break;
+            case "B1":
+                suggestedDepartment = "Emergency Neurology";
+                break;
+            case "C1":
+                suggestedDepartment = "Otolaryngology";
+                break;
+            case "D1":
+                suggestedDepartment = "Internal Medicine";
+                break;
+            case "E1":
+                suggestedDepartment = "Ophthalmology";
+                break;
+            case "F1":
+                suggestedDepartment = "Spinal Surgery or Rehabilitation Medicine";
+                break;
+            case "G1":
+                suggestedDepartment = "Neurosurgery";
+                break;
+            case "A2":
+                suggestedDepartment = "Surgery";
+                break;
+            case "B2":
+                suggestedDepartment = "Gastroenterology";
+                break;
+            case "C2":
+                suggestedDepartment = "General Surgery or Gastroenterology";
+                break;
+            case "D2":
+                suggestedDepartment = "Gynecology or Urology";
+                break;
+            case "E2":
+                suggestedDepartment = "Gastroenterology";
+                break;
+            case "F2":
+                suggestedDepartment = "Emergency Medicine or Dial Emergency Services";
+                break;
+            case "A3":
+                suggestedDepartment = "Respiratory Medicine or Thoracic Surgery";
+                break;
+            case "B3":
+                suggestedDepartment = "Thoracic Surgery";
+                break;
+            case "C3":
+                suggestedDepartment = "Emergency Medicine or Vascular Surgery";
+                break;
+            case "D3":
+                suggestedDepartment = "Cardiology";
+                break;
+            case "E3":
+                suggestedDepartment = "Orthopedics or Thoracic Surgery";
+                break;
+            case "A4":
+                suggestedDepartment = "Orthopedic Spinal Surgery";
+                break;
+            case "B4":
+                suggestedDepartment = "Orthopedics";
+                break;
+            case "C4":
+                suggestedDepartment = "Endocrinology or Rheumatology";
+                break;
+            case "D4":
+                suggestedDepartment = "Vascular Surgery";
+                break;
+            case "E4":
+                suggestedDepartment = "Rheumatology";
+                break;
+            default:
+                suggestedDepartment = "Unknown";
+        }
+
+
+        sectionsToHide.forEach((section) => {
+            section.classList.add("hidden");
+        });
+
+        department.textContent = suggestedDepartment;
+        mainContent.style.display = "none";
+        suggestion.classList.remove("hidden");
+        popup.classList.add("fade-in");
+    }
+
+    function resetSuggestion() {
+        const suggestion = document.getElementById("suggestion");
+        suggestion.classList.add("hidden");
+    }
+
+    function returnToSelection() {
+        resetSuggestion();
+        const suggestion = document.getElementById("suggestion");
+        const popup = document.getElementById("popup");
+        const mainContent = document.querySelector("body > :not(#suggestion)");
+
+        suggestion.classList.add("hidden");
+        popup.classList.remove("fade-in");
+        mainContent.style.display = "block";
+    }
+</script>
+</body>
+</html>
