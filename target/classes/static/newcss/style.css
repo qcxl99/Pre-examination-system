@@ -162,7 +162,7 @@ section div.sec_nav ul li a:hover{
 }
 
 section .sec_flex{
-    background: url(../img/logo1.png) no-repeat center center;
+    background: url(../img/) no-repeat center center;
     background-size: 45vmin;
 }
 div.sec_bgback .sec_leftWrite{
