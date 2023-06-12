@@ -2,6 +2,7 @@ package com.isep.appointement.controller;
 
 import com.isep.appointement.controller.doctor.DoctorService;
 import com.isep.appointement.controller.patient.PatientService;
+import com.isep.appointement.model.Roles;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,7 +33,7 @@ public class HomeController {
     @GetMapping("/personal")
     public String personalPage(Principal principal) {
         String loggedInUserRole = getLoggedInUserRole();
-        if ("Doctor".equals(loggedInUserRole)) {
+        if (Roles.Doctor.name().equals(loggedInUserRole)) {
             return "redirect:/info/doctor";
         }
         else {
@@ -43,7 +44,7 @@ public class HomeController {
     public String reservation(Principal principal) {
         String loggedInUserRole = getLoggedInUserRole();
 
-        if ("Doctor".equals(loggedInUserRole)) {
+        if (Roles.Doctor.name().equals(loggedInUserRole)) {
             return "redirect:/appointment/doctor";
         }
         else {

@@ -44,7 +44,7 @@ public class Reservation {
     private AppointmentStatus status;
 
     public String getAppointmentTime(){
-        if(appointmentTime.contains("T")){
+        if(appointmentTime!= null && appointmentTime.contains("T")){
             LocalDateTime dateTime = LocalDateTime.parse(appointmentTime);
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

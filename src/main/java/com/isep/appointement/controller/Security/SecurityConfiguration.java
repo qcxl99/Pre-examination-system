@@ -152,7 +152,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             String autype = request.getParameter("autype");
             AuthenticationProvider authenticationProvider;
 
-            if ("doctor".equals(autype)) {
+            if (Roles.Doctor.name().equalsIgnoreCase(autype)) {
                 authenticationProvider = doctorDaoAuthenticationProvider();
             } else {
                 authenticationProvider = daoAuthenticationProvider();
@@ -160,7 +160,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             Authentication authentication = authenticationProvider.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getParameter("username"), request.getParameter("password"))
             );
-            if("patient".equalsIgnoreCase(autype)){
+            if(Roles.Patient.name().equalsIgnoreCase(autype)){
                 return grantAdminAuthority(authentication);
             }
 
