@@ -108,7 +108,7 @@
 
         <ol class="breadcrumb mb-4">
 
-            <li class="breadcrumb-item"><a href="/" th:href="@{/home}">Info</a></li>
+            <li class="breadcrumb-item"><a href="/" th:href="@{/appointment/patient/search}">New Appointment</a></li>
             <li class="breadcrumb-item active">Doctor's Information</li>
         </ol>
 
@@ -155,7 +155,7 @@
                     <td>Hospital:</td>
                     <td th:text="${doctor.hospital.getName()}">Hospital 1</td>
                 </tr>
-                </tr>
+
                 <tr>
                     <td>Available time:</td>
                     <td id = "availableTimings" th:text="${doctor.availableTimings}">monday-friday 10:00 - 20:00</td>
@@ -171,7 +171,7 @@
         <div class="left-section">
             <h2>Please select an appointment time:</h2>
             <div class="datepicker-container">
-                <input type="datetime-local" id="timeInput" th:field ="*{appointmentTime}">
+                <input type="datetime-local" id="timeInput" th:field ="*{appointmentTime}" required>
             </div>
             <br></div>
     <br>
@@ -204,7 +204,10 @@
                 alert("Appointments cannot be scheduled on Sundays.");
                 return false; // Prevent form submission
             }
-
+            if(selectedDate < Date.now()){
+                alert("Appointments cannot be scheduled before now.");
+                return false; // Prevent form submission
+            }
             // Check the doctor's available timings
             var availableTimings = document.getElementById("availableTimings").textContent;/* Fetch the doctor's available timings from the server */;
                 if (!isTimeWithinAvailableTimings(hours, minutes,dayOfWeek, availableTimings)) {
